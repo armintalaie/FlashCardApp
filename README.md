@@ -1,6 +1,7 @@
-![picture](data/Logo.png)
 #Flight Tickets Buying App 
 
+
+<img src="data/Logo.png" width="100" height="100" />
 
 **What will the application do?**
 - List of Users
