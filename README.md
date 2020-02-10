@@ -1,7 +1,6 @@
-<figure>
+
 <img src="data/Logo.png" align="right" width="200" height="200">
-<figcaption>flight Tickets Buying App</figcaption>
-</figure>
+<label align for="k"> :dsasdfgre</label>
 
 # Flight Tickets Buying App 
 
