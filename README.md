@@ -1,8 +1,8 @@
 
 
 
-<img src="data/Logo.png" width="100" height="100" class="center" title="Flight Tickets Buying App " >
-
+<img src="data/Logo.png" width="100" height="100" class="center" title="Flight Tickets Buying App" >
+<br>
 #Flight Tickets Buying App 
 
 **What will the application do?**
