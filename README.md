@@ -30,4 +30,14 @@ I have passion for travelling and I've seen many websites selling tickets online
 some very good and some very basic. 
 <br> I think handling a large consumer base that
 will require a good strategy to handle the tickets and payment efficiently.
+<br>
+
+##### User Stories
+- As a user, I want to be able to creat an account with my information
+- As a user, I want to add money to my balance
+- As a user, I want to be able to buy tickets and add them to my list of tickets bought
+- As a user, I want to be rewarded for purchasing flights from this app
+- As a user, I want to be able to select between different types of flights
+- As an airline, I want to be able add/modify flights to list of flights
+
 
