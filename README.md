@@ -1,4 +1,5 @@
-<img src="data/Logo.png" align="right" width="200" height="200" title="Flight Tickets Buying App" >
+<img src="data/Logo.png" align="right" width="200" height="200" 
+<figcaption>**Flight Tickets Buying App**</figcaption>>
 
 
 # Flight Tickets Buying App 
@@ -26,7 +27,7 @@ interesting
 1. people who want to purchase flight tickets
 2. companies to sell flight tickets *(Administrator perspective)*
 
-**Why is this project of interest to you?**
+**Why is this project of interest to you?** <br>
 I have passion for travelling and I've seen many websites selling tickets online;
 some very good and some very basic. 
 <br> I think handling a large consumer base that
