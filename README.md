@@ -1,10 +1,8 @@
 
-<img src="data/Logo.png" align="right" width="200" height="200">
-<label align for="k"> :dsasdfgre</label>
+<img src="data/Logo.png" align="right" width="300" height="300">
 
 # Flight Tickets Buying App 
-
-
+## FlyHigh
 
 
 **What will the application do?**
