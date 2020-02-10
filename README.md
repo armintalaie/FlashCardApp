@@ -1,17 +1,30 @@
-# My Personal Project
-
-## 
-
-
-what this app can do:
-
-- make decks to store cards
-- add new cards to deck (front and back)
-- sort cards
-- filter cards
-- search through cards
-- move/delete/copy decks or cards
+![picture](data/Logo.png)
+#Flight Tickets Buying App 
 
 
-An example of text with **bold** and *italic* fonts.  Note that the IntelliJ markdown previewer doesn't seem to render 
-the bold and italic fonts correctly but they will appear correctly on GitHub.
+**What will the application do?**
+- List of Users
+- Make user accounts
+- List of Flights
+- User can buy tickets
+    - find specific flights
+    - add to cart -> checkout
+    - get points for buying
+    - return flight ticket(s)
+    - buy multiple seats
+- List of Airlines
+- Rewards system for purchasing tickets
+- Airlines, Users and Flights will have features that will make this app more 
+interesting
+
+
+**Who will use it:**
+1. people who want to purchase flight tickets
+2. companies to sell flight tickets *(Administrator perspective)*
+
+**Why is this project of interest to you?**
+I have passion for travelling and I've seen many websites selling tickets online;
+some very good and some very basic. 
+<br> I think handling a large consumer base that
+will require a good strategy to handle the tickets and payment efficiently.
+
