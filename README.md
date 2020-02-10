@@ -1,7 +1,6 @@
-
 #Flight Tickets Buying App 
 
-<img src="data/Logo.png" align="right" width="100" height="100" title="Flight Tickets Buying App" >
+<img src="data/Logo.png" align="right" width="200" height="200" title="Flight Tickets Buying App" >
 
 
 
