@@ -1,10 +1,8 @@
-
-
-
-# Flight Tickets Buying App 
 <img src="data/Logo.png" align="right" width="300" height="300">
 
-## FlyHigh
+# Flight Tickets Buying App 
+
+**FlyHigh**
 
 
 **What will the application do?**
