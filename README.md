@@ -1,6 +1,7 @@
-<img src="data/Logo.png" align="right" width="200" height="200" 
-<figcaption>**Flight Tickets Buying App**</figcaption>>
-
+<figure>
+<img src="data/Logo.png" align="right" width="200" height="200">
+<figcaption>flight Tickets Buying App</figcaption>
+</figure>
 
 # Flight Tickets Buying App 
 
