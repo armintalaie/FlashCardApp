@@ -1,7 +1,8 @@
 
-<img src="data/Logo.png" align="right" width="300" height="300">
+
 
 # Flight Tickets Buying App 
+<img src="data/Logo.png" align="right" width="300" height="300">
 ## FlyHigh
 
 
