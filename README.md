@@ -1,6 +1,7 @@
 # My Personal Project
 
-## Flashcards app
+## 
+
 
 what this app can do:
 
