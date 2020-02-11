@@ -1,43 +1,31 @@
 <img src="data/Logo.png" align="right" width="300" height="300">
 
-# Flight Tickets Buying App 
+# Flash Cards App
 
-**FlyHigh**
 
 
 **What will the application do?**
-- List of Users
-- Make user accounts
-- List of Flights
-- User can buy tickets
-    - find specific flights
-    - add to cart -> checkout
-    - get points for buying
-    - return flight ticket(s)
-    - buy multiple seats
-- List of Airlines
-- Rewards system for purchasing tickets
-- Airlines, Users and Flights will have features that will make this app more 
-interesting
+- List of Flash Cards
+- List of Decks that hold Cards
+- create flashcards
+- create decks
+- review your flash cards
 
 
 **Who will use it:**
-1. people who want to purchase flight tickets
-2. companies to sell flight tickets *(Administrator perspective)*
+1. anyone who wants to study/memorize something 
 
 **Why is this project of interest to you?** <br>
-I have passion for travelling and I've seen many websites selling tickets online;
+For a lot of courses and classes there are a big chunk od the course that needs intensive
+revision and using flash cards can be really helpful
 some very good and some very basic. 
-<br> I think handling a large consumer base that
-will require a good strategy to handle the tickets and payment efficiently.
-<br>
+<br> 
 
 ##### User Stories
-- As a user, I want to be able to create an account with my information
-- As a user, I want to add money to my balance
-- As a user, I want to be able to buy tickets and add them to my list of tickets bought
-- As a user, I want to be rewarded for purchasing flights from this app
-- As a user, I want to be able to select between different types of flights
-- As an airline, I want to be able to add/modify flights to list of flights
+- As a user, I want to create flashcards
+- As a user, I want to creat decks 
+- As a user, I want to add flash cards to a deck
+- As a user, I want to review a deck
+- As a user, I want to see the answer of the card if I'm Wrong
 
 
