@@ -1,4 +1,5 @@
-<img src="data/Logo.png" align="right" width="300" height="300">
+
+<img src="data/logo.png" align="right" width="460" height="239">
 
 # Flash Cards App
 
