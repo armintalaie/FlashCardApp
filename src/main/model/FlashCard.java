@@ -3,7 +3,6 @@ package model;
 // Represents a flashcard with front and back
 public class FlashCard {
 
-
     private String front;
     private String back;
 

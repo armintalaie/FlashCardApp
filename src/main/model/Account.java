@@ -3,42 +3,67 @@ package model;
 import java.util.ArrayList;
 
 public class Account {
+    private String name;
+    private ArrayList<Deck> decks;
 
     public Account(String name) {
-        //stub
+        setName(name);
+        decks = new ArrayList<>();
     }
 
     public String getName() {
-        //stub
-        return null;
+        return this.name;
     }
 
     public void setName(String name) {
-        //stub
+        this.name = name;
     }
 
     public boolean makeDeck(String name) {
-        //stub
-        return false;
+        for (Deck d : decks) {
+            if (d.getName().equals(name)) {
+                return false;
+            }
+        }
+        Deck deck = new Deck(name);
+        this.decks.add(deck);
+        return true;
     }
 
     public boolean addDeck(Deck deck) {
-        //stub
-        return false;
+        for (Deck d : decks) {
+            if (d.getName().equals(deck.getName())) {
+                return false;
+            }
+        }
+        this.decks.add(deck);
+        return true;
     }
 
     public boolean removeDeck(Deck deck) {
-        //stub
+        for (Deck d : decks) {
+            if (d.getName().equals(deck.getName())) {
+                this.decks.remove(d);
+                return true;
+            }
+        }
         return false;
     }
 
     public ArrayList<Deck> getDecks() {
-        //stub
-        return null;
+        return this.decks;
     }
 
     public int numberOfDecks() {
-        //stub
-        return 0;
+        return this.decks.size();
+    }
+
+    public Deck findDeck(String name) {
+        for (Deck d : decks) {
+            if (d.getName().equals(name)) {
+                return d;
+            }
+        }
+        return null;
     }
 }
