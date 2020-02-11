@@ -26,6 +26,7 @@ some very good and some very basic.
 - As a user, I want to create flashcards
 - As a user, I want to creat decks 
 - As a user, I want to add flash cards to a deck
+- As a user, I want to remove a deck
 - As a user, I want to review a deck
 - As a user, I want to see the answer of the card if I'm Wrong
 
