@@ -8,31 +8,34 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-
+// Flash Card Application
 public class FlashCardApp {
     private Account account;
     private Scanner scanner = new Scanner(System.in);
 
+    // EFFECTS: runs runApp() function
     public FlashCardApp() {
         runApp();
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates account with input as name an runs the app to read input
     private void runApp() {
-        System.out.println("Hello; To create an account type your name");
+        System.out.println("Hello\nTo create an account type your name");
         account = new Account(scanner.next());
         boolean keepGoing = true;
         possibleCommands();
 
         while (keepGoing) {
             String command = scanner.nextLine().toLowerCase();
-            System.out.println(command);
             keepGoing = readCommand(command);
 
         }
     }
 
+    // EFFECTS: prints possible commands you can type
     private void possibleCommands() {
-        System.out.println("options:");
+        System.out.println("Options:");
         System.out.println("create deck");
         System.out.println("create flashcard");
         System.out.println("decks");
@@ -40,6 +43,7 @@ public class FlashCardApp {
 
     }
 
+    // EFFECTS: calls the right method based on the input
     private boolean readCommand(String command) {
         switch (command) {
             case "create deck": {
@@ -61,6 +65,9 @@ public class FlashCardApp {
         return true;
     }
 
+    // MODIFIES: this
+    // EFFECTS: deletes deck of choosing if remove is typed
+    // or finds a deck and you can either remove a card or choose card to see its answer based on input
     private void deckManagement() {
         printAllDecks(account);
         boolean keepGoing = true;
@@ -71,9 +78,7 @@ public class FlashCardApp {
                 Deck deck = account.findDeck(scanner.next());
                 account.removeDeck(deck);
             }
-            System.out.println(command);
             Deck deck = account.findDeck(scanner.next());
-            System.out.println(deck);
 
             if (deck != null) {
                 command = scanner.nextLine();
@@ -83,12 +88,14 @@ public class FlashCardApp {
                 chooseFlashCard(deck);
                 keepGoing = false;
             } else {
-                System.out.println("mmmm");
+                System.out.println("no such deck");
             }
         }
 
     }
 
+    // EFFECTS: prints all cards in deck and by typing a correct card you can see an answer
+    // otherwise you will get an error message
     private void chooseFlashCard(Deck deck) {
         showAllCards(deck.getCards());
         boolean keepGoing = true;
@@ -96,9 +103,9 @@ public class FlashCardApp {
 
         while (keepGoing) {
             String command = scanner.nextLine();
-            //System.out.println(command);
 
             if (command.equals("end")) {
+                keepGoing = false;
                 return;
             }
             FlashCard card = deck.findCard(command);
@@ -111,12 +118,15 @@ public class FlashCardApp {
         }
     }
 
+    // EFFECTS: prints all cards in list
     private void showAllCards(ArrayList<FlashCard> cards) {
         for (FlashCard card : cards) {
             System.out.println(card.getFront());
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates a flashcard from inputs for front and back and adds them to a previously created deck
     private void creatFlashCard() {
         boolean keepGoing = true;
         System.out.println("Enter Flashcard's Front");
@@ -142,6 +152,8 @@ public class FlashCardApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates deck with name from input, if one with that name exists, it will show an error message
     private void createDeck() {
         System.out.println("Enter Deck's Name");
         String deckName = scanner.next();
@@ -152,6 +164,7 @@ public class FlashCardApp {
         }
     }
 
+    // EFFECTS: prints the name of all decks currently active
     private void printAllDecks(Account account) {
         ArrayList<Deck> decks = account.getDecks();
 
