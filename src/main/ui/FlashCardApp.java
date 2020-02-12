@@ -7,6 +7,8 @@ import model.FlashCard;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+
 public class FlashCardApp {
     private Account account;
     private Scanner scanner = new Scanner(System.in);
@@ -19,28 +21,44 @@ public class FlashCardApp {
         System.out.println("Hello; To create an account type your name");
         account = new Account(scanner.next());
         boolean keepGoing = true;
+        possibleCommands();
 
         while (keepGoing) {
             String command = scanner.nextLine().toLowerCase();
             System.out.println(command);
-            switch (command) {
-                case "create deck": {
-                    createDeck();
-                    break;
-                }
-                case "create flashcard": {
-                    creatFlashCard();
-                    break;
-                }
-                case "decks": {
-                    deckManagement();
-                    break;
-                }
-                case "quit": {
-                    keepGoing = false;
-                }
+            keepGoing = readCommand(command);
+
+        }
+    }
+
+    private void possibleCommands() {
+        System.out.println("options:");
+        System.out.println("create deck");
+        System.out.println("create flashcard");
+        System.out.println("decks");
+        System.out.println("quit");
+
+    }
+
+    private boolean readCommand(String command) {
+        switch (command) {
+            case "create deck": {
+                createDeck();
+                break;
+            }
+            case "create flashcard": {
+                creatFlashCard();
+                break;
+            }
+            case "decks": {
+                deckManagement();
+                break;
+            }
+            case "quit": {
+                return false;
             }
         }
+        return true;
     }
 
     private void deckManagement() {
@@ -49,14 +67,20 @@ public class FlashCardApp {
 
         while (keepGoing) {
             String command = scanner.nextLine();
+            if (command.contains("remove")) {
+                Deck deck = account.findDeck(scanner.next());
+                account.removeDeck(deck);
+            }
             System.out.println(command);
             Deck deck = account.findDeck(scanner.next());
             System.out.println(deck);
 
             if (deck != null) {
-                System.out.println("not null");
-                showAllCards(deck.getCards());
-                System.out.println(deck.getCards().size() + "ffff");
+                command = scanner.nextLine();
+                if (command.contains("remove")) {
+                    deck.removeCard(command);
+                }
+                chooseFlashCard(deck);
                 keepGoing = false;
             } else {
                 System.out.println("mmmm");
@@ -65,13 +89,32 @@ public class FlashCardApp {
 
     }
 
+    private void chooseFlashCard(Deck deck) {
+        showAllCards(deck.getCards());
+        boolean keepGoing = true;
+        System.out.println("type the number or front to see back of card");
+
+        while (keepGoing) {
+            String command = scanner.nextLine();
+            //System.out.println(command);
+
+            if (command.equals("end")) {
+                return;
+            }
+            FlashCard card = deck.findCard(command);
+
+            if (card != null) {
+                System.out.println("Front: " + card.getFront() + "\t Back: " + card.getBack());
+            } else {
+                System.out.println("no card with that front exists");
+            }
+        }
+    }
+
     private void showAllCards(ArrayList<FlashCard> cards) {
-        System.out.println(cards.size() + "popo");
         for (FlashCard card : cards) {
-            System.out.println("kdkdkdkd");
             System.out.println(card.getFront());
         }
-
     }
 
     private void creatFlashCard() {

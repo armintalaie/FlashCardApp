@@ -21,8 +21,8 @@ class FlashCardTest {
 
     @Test
     void testSetFront() {
-        flashCard.setFront("4 x 1 = ?");
-        assertEquals(flashCard.getFront(), "4 x 1 = ?");
+        flashCard.setFront("4 x 1 \\= \\?");
+        assertEquals(flashCard.getFront(), "4 x 1 \\= \\?");
         assertEquals(flashCard.getBack(), "4");
     }
 

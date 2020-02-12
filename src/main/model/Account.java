@@ -31,21 +31,19 @@ public class Account {
     }
 
     public boolean addDeck(Deck deck) {
-        for (Deck d : decks) {
-            if (d.getName().equals(deck.getName())) {
-                return false;
-            }
+        Deck d = findDeck(deck.getName());
+        if (d == null) {
+            this.decks.add(deck);
+            return true;
         }
-        this.decks.add(deck);
-        return true;
+        return false;
     }
 
     public boolean removeDeck(Deck deck) {
-        for (Deck d : decks) {
-            if (d.getName().equals(deck.getName())) {
-                this.decks.remove(d);
-                return true;
-            }
+        Deck d = findDeck(deck.getName());
+        if (d != null) {
+            this.decks.remove(d);
+            return true;
         }
         return false;
     }

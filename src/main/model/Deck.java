@@ -33,7 +33,7 @@ public class Deck {
     //MODIFIES: THIS
     //EFFECTS : adds flashcard to list of cards
     public boolean addCard(FlashCard card) {
-        if (cards.contains(card)) {
+        if (null != findCard(card.getFront())) {
             return false;
         } else {
             cards.add(card);
@@ -45,7 +45,20 @@ public class Deck {
     //MODIFIES: THIS
     //EFFECTS : removes flashcard from list of cards
     public boolean removeCard(FlashCard card) {
-        //stub
+        if (cards.contains(card)) {
+            this.cards.remove(card);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean removeCard(String front) {
+        FlashCard card = findCard(front);
+        if (card != null) {
+            removeCard(card);
+            return true;
+        }
         return false;
     }
 
@@ -58,7 +71,15 @@ public class Deck {
     //Gets number cards in deck
     //EFFECTS : return length of list of cards
     public int numberOfCards() {
-        //stub
-        return 0;
+        return cards.size();
+    }
+
+    public FlashCard findCard(String front) {
+        for (FlashCard card : this.cards) {
+            if (card.getFront().equals(front)) {
+                return card;
+            }
+        }
+        return null;
     }
 }

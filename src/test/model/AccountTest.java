@@ -45,6 +45,7 @@ class AccountTest {
     void testAddDeck() {
         assertTrue(account.addDeck(new Deck("Chemistry")));
         assertEquals(account.numberOfDecks(), 1);
+        assertFalse(account.addDeck(new Deck("Chemistry")));
     }
 
     @Test
@@ -66,7 +67,7 @@ class AccountTest {
 
     @Test
     void TestGetDecks() {
-        ArrayList<Deck> decks = new ArrayList<Deck>();
+        ArrayList<Deck> decks = new ArrayList<>();
         decks.add(deck);
         account.addDeck(deck);
         assertEquals(account.getDecks(), decks);
@@ -74,6 +75,14 @@ class AccountTest {
         account.addDeck(deck1);
         decks.add(deck1);
         assertEquals(account.getDecks(), decks);
+    }
+
+    @Test
+    void TestFindDeck() {
+        account.addDeck(deck);
+        assertEquals(account.findDeck(deck.getName()), deck);
+
+        assertNull(account.findDeck(deck1.getName()));
     }
 
 }

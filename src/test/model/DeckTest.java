@@ -38,6 +38,7 @@ class DeckTest {
         deck.addCard(flashCard);
         assertEquals(deck.numberOfCards(), 1);
         assertEquals(deck.getCards().get(0), flashCard);
+        assertFalse(deck.addCard(flashCard));
     }
 
     @Test
@@ -70,6 +71,33 @@ class DeckTest {
         assertEquals(deck.numberOfCards(), 1);
 
 
+    }
+
+    @Test
+    void removeCardWithFront() {
+
+        deck.addCard(flashCard);
+        assertFalse(deck.removeCard(flashCard1.getFront()));
+        assertEquals(deck.numberOfCards(), 1);
+
+        deck.addCard(flashCard1);
+        assertEquals(deck.numberOfCards(), 2);
+        assertTrue(deck.removeCard(flashCard1.getFront()));
+        assertEquals(deck.numberOfCards(), 1);
+
+    }
+
+    @Test
+    void testGetCards() {
+        ArrayList<FlashCard> cards = new ArrayList<>();
+
+        deck.addCard(flashCard);
+        cards.add(flashCard);
+        assertEquals(deck.getCards(), cards);
+
+        deck.addCard(flashCard1);
+        cards.add(flashCard1);
+        assertEquals(deck.getCards(), cards);
     }
 }
 
