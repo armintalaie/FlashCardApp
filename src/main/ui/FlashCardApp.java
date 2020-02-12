@@ -78,7 +78,7 @@ public class FlashCardApp {
                 Deck deck = account.findDeck(scanner.next());
                 account.removeDeck(deck);
             }
-            Deck deck = account.findDeck(scanner.next());
+            Deck deck = account.findDeck(command);
 
             if (deck != null) {
                 command = scanner.nextLine();
