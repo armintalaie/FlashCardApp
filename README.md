@@ -27,7 +27,7 @@ some very good and some very basic.
 
 #### User Stories
 - As a user, I want to create flashcards
-- As a user, I want to creat decks 
+- As a user, I want to create decks 
 - As a user, I want to use flash cards in decks
     - add a card to a deck
     - remove a card from a deck

@@ -55,10 +55,11 @@ public class FlashCardApp {
                 break;
             }
             case "decks": {
-                deckManagement();
+                allDecksManagement();
                 break;
             }
             case "quit": {
+                System.out.println("bye " + account.getName());
                 return false;
             }
         }
@@ -66,46 +67,76 @@ public class FlashCardApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: deletes deck of choosing if remove is typed
-    // or finds a deck and you can either remove a card or choose card to see its answer based on input
-    private void deckManagement() {
-        printAllDecks(account);
-        boolean keepGoing = true;
-
-        while (keepGoing) {
+    // EFFECTS: deletes deck of choosing if remove is typed or finds a deck
+    private void allDecksManagement() {
+        while (true) {
+            printDeckOptions();
             String command = scanner.nextLine();
+            if (command.contains("back")) {
+                return;
+            }
             if (command.contains("remove")) {
-                Deck deck = account.findDeck(scanner.next());
-                account.removeDeck(deck);
+                if (!account.removeDeck(account.findDeck(command.replace("remove ", "")))) {
+                    System.out.println("no such deck");
+                    continue;
+                } else if (account.numberOfDecks() == 0) {
+                    System.out.println("No more decks; will return to main menu");
+                } else {
+                    continue;
+                }
             }
             Deck deck = account.findDeck(command);
-
             if (deck != null) {
-                command = scanner.nextLine();
-                if (command.contains("remove")) {
-                    deck.removeCard(command);
-                }
-                chooseFlashCard(deck);
-                keepGoing = false;
+                singleDeckManagement(deck);
             } else {
                 System.out.println("no such deck");
             }
         }
-
     }
 
+
+    // EFFECTS: prints a message and all decks
+    private void printDeckOptions() {
+        System.out.println("options : type remove + deck name to remove it or the deck name to see the answer");
+        printAllDecks(account);
+    }
+
+    // REQUIRES : deck is not null
+    // MODIFIES: this
+    // EFFECTS: deletes deck of choosing if remove is typed or finds a deck
+    private void singleDeckManagement(Deck deck) {
+
+        while (true) {
+            showAllCards(deck.getCards());
+            System.out.println("options : type remove + card name to remove it or cards to select one");
+            String command = scanner.nextLine();
+
+            if (command.contains("remove")) {
+                if (!deck.removeCard(command.replace("remove ", ""))) {
+                    System.out.println("no such card");
+                } else if (deck.numberOfCards() == 0) {
+                    System.out.println("No more cards; will return to decks menu");
+                    allDecksManagement();
+                }
+            } else if (command.contains("choose")) {
+                chooseFlashCard(deck);
+            } else if (command.contains("back")) {
+                return;
+            }
+        }
+    }
+
+
+    // REQUIRES : deck is not null
     // EFFECTS: prints all cards in deck and by typing a correct card you can see an answer
     // otherwise you will get an error message
     private void chooseFlashCard(Deck deck) {
+
         showAllCards(deck.getCards());
-        boolean keepGoing = true;
-        System.out.println("type the number or front to see back of card");
+        String command = scanner.nextLine();
+        while (true) {
 
-        while (keepGoing) {
-            String command = scanner.nextLine();
-
-            if (command.equals("end")) {
-                keepGoing = false;
+            if (command.equals("back")) {
                 return;
             }
             FlashCard card = deck.findCard(command);
@@ -114,7 +145,10 @@ public class FlashCardApp {
                 System.out.println("Front: " + card.getFront() + "\t Back: " + card.getBack());
             } else {
                 System.out.println("no card with that front exists");
+                return;
             }
+
+            command = scanner.nextLine();
         }
     }
 
@@ -151,6 +185,7 @@ public class FlashCardApp {
             }
         }
     }
+
 
     // MODIFIES: this
     // EFFECTS: creates deck with name from input, if one with that name exists, it will show an error message
