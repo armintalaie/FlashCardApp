@@ -62,8 +62,17 @@ public class FlashCardApp {
                 System.out.println("bye " + account.getName());
                 return false;
             }
+            case "load": {
+                //System.out.println("bye " + account.getName());
+                loadAccount();
+                return false;
+            }
         }
         return true;
+    }
+
+    private void loadAccount() {
+
     }
 
     // MODIFIES: this
