@@ -13,6 +13,8 @@ import java.util.List;
 
 // A reader that can read account data from a file
 public class Reader {
+    // TODO: add proper try/catch blocks
+    // TODO: ++ add functionality to store/read multiple accounts
     public static final String DELIMITER = ",";
 
     // EFFECTS: returns an account parsed from file; throws
@@ -42,10 +44,8 @@ public class Reader {
                     break;
                 }
                 case 0: {
-                    if (deck != null) {
-                        account.addDeck(deck);
-                    }
                     deck = new Deck(lineComponents.get(1));
+                    account.addDeck(deck);
                     break;
                 }
                 case 1: {

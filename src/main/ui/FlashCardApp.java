@@ -3,13 +3,22 @@ package ui;
 import model.Account;
 import model.Deck;
 import model.FlashCard;
+import persistence.Reader;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
 // Flash Card Application
 public class FlashCardApp {
+    // TODO: fully implement reading txt file
+    // TODO: fully implement saving txt file
+    // TODO: fix main menu to either load or create and account
+
+
+    private static String saveFile = "data/samplefile.txt";
     private Account account;
     private Scanner scanner = new Scanner(System.in);
 
@@ -43,6 +52,7 @@ public class FlashCardApp {
 
     }
 
+    // TODO: break down readCommand method into smaller methods
     // EFFECTS: calls the right method based on the input
     private boolean readCommand(String command) {
         switch (command) {
@@ -63,15 +73,22 @@ public class FlashCardApp {
                 return false;
             }
             case "load": {
-                //System.out.println("bye " + account.getName());
                 loadAccount();
-                return false;
+                break;
             }
         }
         return true;
     }
 
     private void loadAccount() {
+        try {
+            System.out.println("dddd");
+            this.account = Reader.readAccounts(new File(saveFile));
+            System.out.println("dddd");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 
 // A writer that can write account data to a file
 public class Writer {
+    // TODO: check if this works and modify the code and/or its documentation if needed
     private PrintWriter printWriter;
 
     // EFFECTS: constructs a writer that will write data to file
