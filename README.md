@@ -32,5 +32,5 @@ some very good and some very basic.
     - add a card to a deck
     - remove a card from a deck
 - As a user, I want to see the answer of a card
-
-
+As a user, I want to be able to save my account which contains decks and cards
+As a user, I want to be able to optionally load my saved decks and cards when I type my name
