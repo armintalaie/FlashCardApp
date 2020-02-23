@@ -15,7 +15,7 @@ import java.util.List;
 public class Reader {
     // TODO: add proper try/catch blocks
     // TODO: ++ add functionality to store/read multiple accounts
-    private static final String DELIMITER = ",";
+    public static final String DELIMITER = ",";
 
     // EFFECTS: returns an account parsed from file; throws
     // IOException if an exception is raised when opening / reading from file

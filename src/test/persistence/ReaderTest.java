@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class ReaderTest {
-    // TODO: add tests for the Reader class
     private static String saveFile = "data/samplefile.txt";
 
     @Test

@@ -1,8 +1,16 @@
 package model;
 
+import persistence.Reader;
+import persistence.Saveable;
+
+import javax.print.DocFlavor;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class Account {
+public class Account implements Saveable {
+    private static int NAME_ID = 2;
+    private static int DECK_ID = 0;
+    private static int CARD_ID = 1;
     private String name;
     private ArrayList<Deck> decks;
 
@@ -63,5 +71,28 @@ public class Account {
             }
         }
         return null;
+    }
+
+    @Override
+    public void save(PrintWriter printWriter) {
+        printWriter.print(NAME_ID);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.println(this.name);
+
+        for (Deck deck : this.decks) {
+            printWriter.print(DECK_ID);
+            printWriter.print(Reader.DELIMITER);
+            printWriter.println(deck.getName());
+
+            for (FlashCard card : deck.getCards()) {
+                printWriter.print(CARD_ID);
+                printWriter.print(Reader.DELIMITER);
+                printWriter.print(card.getFront());
+                printWriter.print(Reader.DELIMITER);
+                printWriter.println(card.getBack());
+            }
+        }
+
+
     }
 }

@@ -4,6 +4,7 @@ import model.Account;
 import model.Deck;
 import model.FlashCard;
 import persistence.Reader;
+import persistence.Writer;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,12 +14,10 @@ import java.util.Scanner;
 
 // Flash Card Application
 public class FlashCardApp {
-    // TODO: fully implement reading txt file
-    // TODO: fully implement saving txt file
     // TODO: fix main menu to either load or create and account
 
-
-    private static String saveFile = "data/samplefile.txt";
+    private static String SAVE_PATH = "data/samplefile2";
+    private static String SAVE_FILE = "data/samplefile.txt";
     private Account account;
     private Scanner scanner = new Scanner(System.in);
 
@@ -48,6 +47,8 @@ public class FlashCardApp {
         System.out.println("create deck");
         System.out.println("create flashcard");
         System.out.println("decks");
+        System.out.println("load");
+        System.out.println("save");
         System.out.println("quit");
 
     }
@@ -76,15 +77,28 @@ public class FlashCardApp {
                 loadAccount();
                 break;
             }
+            case "save": {
+                saveAccount(account);
+                break;
+            }
         }
         return true;
     }
 
+    private void saveAccount(Account account) {
+
+        try {
+            Writer writer = new Writer(new File(SAVE_PATH));
+            writer.write(account);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("kdkdkd");
+        }
+    }
+
     private void loadAccount() {
         try {
-            System.out.println("dddd");
-            this.account = Reader.readAccounts(new File(saveFile));
-            System.out.println("dddd");
+            this.account = Reader.readAccounts(new File(SAVE_FILE));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -233,6 +247,7 @@ public class FlashCardApp {
             System.out.println(d.getName());
         }
     }
+
 }
 
 
