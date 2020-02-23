@@ -9,6 +9,7 @@ import persistence.Writer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -20,9 +21,12 @@ public class FlashCardApp {
     private static String SAVE_FILE = "data/samplefile.txt";
     private Account account;
     private Scanner scanner = new Scanner(System.in);
+    private HashMap<String, Integer> commands;
 
     // EFFECTS: runs runApp() function
     public FlashCardApp() {
+        commands = new HashMap<>();
+        commandToNumberRef(commands);
         runApp();
     }
 
@@ -30,15 +34,30 @@ public class FlashCardApp {
     // EFFECTS: creates account with input as name an runs the app to read input
     private void runApp() {
         System.out.println("Hello\nTo create an account type your name");
-        account = new Account(scanner.next());
+        account = new Account(scanner.nextLine());
         boolean keepGoing = true;
         possibleCommands();
 
         while (keepGoing) {
             String command = scanner.nextLine().toLowerCase();
-            keepGoing = readCommand(command);
+            try {
+                keepGoing = readCommand(commands.get(command));
+            } catch (NullPointerException e) {
+                System.out.println("wrong command");
+                possibleCommands();
+            }
 
         }
+    }
+
+    private void commandToNumberRef(HashMap<String, Integer> commands) {
+        commands.put("create deck", 0);
+        commands.put("create flashcard", 1);
+        commands.put("deck", 2);
+        commands.put("decks", 3);
+        commands.put("load", 4);
+        commands.put("save", 5);
+        commands.put("quit", 6);
     }
 
     // EFFECTS: prints possible commands you can type
@@ -55,32 +74,21 @@ public class FlashCardApp {
 
     // TODO: break down readCommand method into smaller methods
     // EFFECTS: calls the right method based on the input
-    private boolean readCommand(String command) {
-        switch (command) {
-            case "create deck": {
-                createDeck();
-                break;
-            }
-            case "create flashcard": {
-                creatFlashCard();
-                break;
-            }
-            case "decks": {
-                allDecksManagement();
-                break;
-            }
-            case "quit": {
-                System.out.println("bye " + account.getName());
-                return false;
-            }
-            case "load": {
-                loadAccount();
-                break;
-            }
-            case "save": {
-                saveAccount(account);
-                break;
-            }
+    private boolean readCommand(int command) {
+
+        if (command == 0) {
+            createDeck();
+        } else if (command == 1) {
+            creatFlashCard();
+        } else if (command == 2) {
+            allDecksManagement();
+        } else if (command == 3) {
+            System.out.println("bye " + account.getName());
+            return false;
+        } else if (command == 4) {
+            loadAccount();
+        } else if (command == 5) {
+            saveAccount(account);
         }
         return true;
     }
