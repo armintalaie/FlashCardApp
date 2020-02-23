@@ -16,6 +16,7 @@ import java.util.Scanner;
 // Flash Card Application
 public class FlashCardApp {
     // TODO: fix main menu to either load or create and account
+    // TODO: better ui
 
     private static String SAVE_PATH = "data/samplefile2";
     private static String SAVE_FILE = "data/samplefile.txt";
@@ -72,7 +73,6 @@ public class FlashCardApp {
 
     }
 
-    // TODO: break down readCommand method into smaller methods
     // EFFECTS: calls the right method based on the input
     private boolean readCommand(int command) {
 
