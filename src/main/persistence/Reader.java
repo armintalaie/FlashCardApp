@@ -14,7 +14,6 @@ import java.util.List;
 // A reader that can read account data from a file
 public class Reader {
     // TODO: add proper try/catch blocks
-    // TODO: ++ add functionality to store/read multiple accounts
     public static final String DELIMITER = ",";
 
     // EFFECTS: returns an account parsed from file; throws
