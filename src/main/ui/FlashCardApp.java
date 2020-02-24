@@ -15,11 +15,9 @@ import java.util.Scanner;
 
 // Flash Card Application
 public class FlashCardApp {
-    // TODO: fix main menu to either load or create and account
     // TODO: better ui
 
-    private static String SAVE_PATH = "data/samplefile2";
-    private static String SAVE_FILE = "data/samplefile.txt";
+    private static String STORED_ACCOUNTS = "data/Accounts/";
     private Account account;
     private Scanner scanner = new Scanner(System.in);
     private HashMap<String, Integer> commands;
@@ -34,8 +32,7 @@ public class FlashCardApp {
     // MODIFIES: this
     // EFFECTS: creates account with input as name an runs the app to read input
     private void runApp() {
-        initialAccountSetUp();
-        boolean keepGoing = true;
+        boolean keepGoing = initialAccountSetUp();
 
         while (keepGoing) {
             possibleCommands();
@@ -48,22 +45,33 @@ public class FlashCardApp {
         }
     }
 
-    private void initialAccountSetUp() {
+    private boolean initialAccountSetUp() {
         System.out.println("Hello\nDo you want to create or load an account?");
         while (true) {
             String command = scanner.nextLine().toLowerCase();
             if (command.contains("load")) {
-                loadAccount();
+                if (!loadAccount()) {
+                    return false;
+                }
                 System.out.println("Welcome back " + account.getName() + "!");
                 break;
             } else if (command.contains("create")) {
-                System.out.println("Awesome! What's your name?");
-                account = new Account(scanner.nextLine());
-                System.out.println("Welcome " + account.getName() + "!");
-                break;
+                createAccount();
             } else {
                 System.out.println("please type either \"create\" or \"load\" ");
             }
+        }
+        return true;
+    }
+
+    private void createAccount() {
+        System.out.println("Awesome! What's your name?");
+        String name = scanner.nextLine();
+        if (!new File(STORED_ACCOUNTS + name).exists()) {
+            account = new Account(name);
+            System.out.println("Welcome " + account.getName() + "!");
+        } else {
+            System.out.println("Sorry, an account with that name already exists\n please choose another name.");
         }
     }
 
@@ -85,7 +93,7 @@ public class FlashCardApp {
 
     // EFFECTS: prints possible commands you can type
     private void possibleCommands() {
-        System.out.println("What do you want to do?\t(type option or its number)");
+        System.out.println("What do you want to do, " + account.getName() + "?\t(type option or its number)");
         System.out.print("1. Create a deck      ");
         System.out.println("\t2. Create a flashcard");
         System.out.print("3. Decks              ");
@@ -105,12 +113,13 @@ public class FlashCardApp {
         } else if (command == 3) {
             allDecksManagement();
         } else if (command == 4) {
-            System.out.println("bye " + account.getName());
-            return false;
-        } else if (command == 5) {
             loadAccount();
+        } else if (command == 5) {
+            saveAccount(account);
         } else if (command == 6) {
             saveAccount(account);
+            System.out.println("Bye " + account.getName() + "!");
+            return false;
         }
         return true;
     }
@@ -118,22 +127,31 @@ public class FlashCardApp {
     private void saveAccount(Account account) {
 
         try {
-            Writer writer = new Writer(new File(SAVE_PATH));
+            Writer writer = new Writer(new File(STORED_ACCOUNTS + account.getName()));
             writer.write(account);
             writer.close();
+            System.out.println("saved successfully");
         } catch (IOException e) {
-            System.out.println("kdkdkd");
+            System.out.println("could not save :((");
         }
     }
 
-    private void loadAccount() {
-        try {
-            this.account = Reader.readAccounts(new File(SAVE_FILE));
-        } catch (IOException e) {
-            e.printStackTrace();
+    private boolean loadAccount() {
+        System.out.println("Please type your account's name");
+        while (true) {
+            String name = scanner.nextLine();
+            if (name.contains("quit")) {
+                return false;
+            }
+            try {
+                System.out.println(STORED_ACCOUNTS + name);
+                this.account = Reader.readAccounts(new File(STORED_ACCOUNTS + name));
+                break;
+            } catch (IOException e) {
+                System.out.println("No account with that name exists. try again or type quit");
+            }
         }
-
-
+        return true;
     }
 
     // MODIFIES: this
