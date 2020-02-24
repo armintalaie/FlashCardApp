@@ -15,7 +15,12 @@ import java.util.Scanner;
 
 // Flash Card Application
 public class FlashCardApp {
-    // TODO: better ui
+    // TODO: better deck and flash card ui
+    // TODO: add clear back navigation to the ui
+    // TODO: make sure every method has proper documentation
+
+    // TODO: --EXTRA-- add passwords to accounts
+    // TODO: --EXTRA-- ability to move cards between decks
 
     private static String STORED_ACCOUNTS = "data/Accounts/";
     private Account account;
@@ -56,7 +61,9 @@ public class FlashCardApp {
                 System.out.println("Welcome back " + account.getName() + "!");
                 break;
             } else if (command.contains("create")) {
-                createAccount();
+                if (createAccount()) {
+                    break;
+                }
             } else {
                 System.out.println("please type either \"create\" or \"load\" ");
             }
@@ -64,14 +71,16 @@ public class FlashCardApp {
         return true;
     }
 
-    private void createAccount() {
+    private boolean createAccount() {
         System.out.println("Awesome! What's your name?");
         String name = scanner.nextLine();
         if (!new File(STORED_ACCOUNTS + name).exists()) {
             account = new Account(name);
             System.out.println("Welcome " + account.getName() + "!");
+            return true;
         } else {
             System.out.println("Sorry, an account with that name already exists\n please choose another name.");
+            return false;
         }
     }
 
@@ -144,7 +153,6 @@ public class FlashCardApp {
                 return false;
             }
             try {
-                System.out.println(STORED_ACCOUNTS + name);
                 this.account = Reader.readAccounts(new File(STORED_ACCOUNTS + name));
                 break;
             } catch (IOException e) {
