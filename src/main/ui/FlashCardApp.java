@@ -34,60 +34,82 @@ public class FlashCardApp {
     // MODIFIES: this
     // EFFECTS: creates account with input as name an runs the app to read input
     private void runApp() {
-        System.out.println("Hello\nTo create an account type your name");
-        account = new Account(scanner.nextLine());
+        initialAccountSetUp();
         boolean keepGoing = true;
-        possibleCommands();
 
         while (keepGoing) {
+            possibleCommands();
             String command = scanner.nextLine().toLowerCase();
             try {
                 keepGoing = readCommand(commands.get(command));
             } catch (NullPointerException e) {
                 System.out.println("wrong command");
-                possibleCommands();
             }
+        }
+    }
 
+    private void initialAccountSetUp() {
+        System.out.println("Hello\nDo you want to create or load an account?");
+        while (true) {
+            String command = scanner.nextLine().toLowerCase();
+            if (command.contains("load")) {
+                loadAccount();
+                System.out.println("Welcome back " + account.getName() + "!");
+                break;
+            } else if (command.contains("create")) {
+                System.out.println("Awesome! What's your name?");
+                account = new Account(scanner.nextLine());
+                System.out.println("Welcome " + account.getName() + "!");
+                break;
+            } else {
+                System.out.println("please type either \"create\" or \"load\" ");
+            }
         }
     }
 
     private void commandToNumberRef(HashMap<String, Integer> commands) {
-        commands.put("create deck", 0);
-        commands.put("create flashcard", 1);
-        commands.put("deck", 2);
+        commands.put("create a deck", 1);
+        commands.put("create a flashcard", 2);
         commands.put("decks", 3);
         commands.put("load", 4);
         commands.put("save", 5);
         commands.put("quit", 6);
+
+        commands.put("1", 1);
+        commands.put("2", 2);
+        commands.put("3", 3);
+        commands.put("4", 4);
+        commands.put("5", 5);
+        commands.put("6", 6);
     }
 
     // EFFECTS: prints possible commands you can type
     private void possibleCommands() {
-        System.out.println("Options:");
-        System.out.println("create deck");
-        System.out.println("create flashcard");
-        System.out.println("decks");
-        System.out.println("load");
-        System.out.println("save");
-        System.out.println("quit");
+        System.out.println("What do you want to do?\t(type option or its number)");
+        System.out.print("1. Create a deck      ");
+        System.out.println("\t2. Create a flashcard");
+        System.out.print("3. Decks              ");
+        System.out.println("\t4. Load              ");
+        System.out.print("5. Save               ");
+        System.out.println("\t6. Quit              ");
 
     }
 
     // EFFECTS: calls the right method based on the input
     private boolean readCommand(int command) {
 
-        if (command == 0) {
+        if (command == 1) {
             createDeck();
-        } else if (command == 1) {
-            creatFlashCard();
         } else if (command == 2) {
-            allDecksManagement();
+            creatFlashCard();
         } else if (command == 3) {
+            allDecksManagement();
+        } else if (command == 4) {
             System.out.println("bye " + account.getName());
             return false;
-        } else if (command == 4) {
-            loadAccount();
         } else if (command == 5) {
+            loadAccount();
+        } else if (command == 6) {
             saveAccount(account);
         }
         return true;
@@ -212,14 +234,14 @@ public class FlashCardApp {
     private void creatFlashCard() {
         boolean keepGoing = true;
         System.out.println("Enter Flashcard's Front");
-        String front = scanner.next();
+        String front = scanner.nextLine();
         System.out.println("Enter Flashcard's back");
-        String back = scanner.next();
+        String back = scanner.nextLine();
         FlashCard flashCard = new FlashCard(front, back);
         System.out.println("card successfully made. which deck do you want ot add it to?");
         while (keepGoing) {
             printAllDecks(account);
-            Deck deck = account.findDeck(scanner.next());
+            Deck deck = account.findDeck(scanner.nextLine());
 
             if (deck != null) {
                 if (deck.addCard(flashCard)) {
@@ -239,7 +261,7 @@ public class FlashCardApp {
     // EFFECTS: creates deck with name from input, if one with that name exists, it will show an error message
     private void createDeck() {
         System.out.println("Enter Deck's Name");
-        String deckName = scanner.next();
+        String deckName = scanner.nextLine();
         if (account.makeDeck(deckName)) {
             System.out.println("Deck successfully made");
         } else {
