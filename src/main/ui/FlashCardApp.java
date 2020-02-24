@@ -17,7 +17,9 @@ import java.util.Scanner;
 public class FlashCardApp {
     // TODO: better deck and flash card ui
     // TODO: add clear back navigation to the ui
+    // TODO: further steps after trying to add a flashcard that already exists
     // TODO: make sure every method has proper documentation
+
 
     // TODO: --EXTRA-- add passwords to accounts
     // TODO: --EXTRA-- ability to move cards between decks
