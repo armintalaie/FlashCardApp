@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ReaderTest {
-    private static String saveFile = "data/samplefile.txt";
+    private static String saveFile = "data/samplefile2";
 
     @Test
     void parseContent() {
