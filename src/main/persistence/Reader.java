@@ -62,18 +62,3 @@ public class Reader {
         return new ArrayList<>(Arrays.asList(splits));
     }
 }
-/*
-    // REQUIRES: components has size 4 where element 0 represents the
-    // id of the next account to be constructed, element 1 represents
-    // the id, elements 2 represents the name and element 3 represents
-    // the balance of the account to be constructed
-    // EFFECTS: returns an account constructed from components
-    private static Account parseAccount(List<String> components) {
-        int nextId = Integer.parseInt(components.get(0));
-        int id = Integer.parseInt(components.get(1));
-        String name = components.get(2);
-        double balance = Double.parseDouble(components.get(3));
-        return new Account(nextId, id, name, balance);
-    }
-}
-*/
