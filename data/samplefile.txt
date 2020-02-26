@@ -1,11 +1,8 @@
 2,Joe
 0,Math
-1,2*2,4
-1,2*3,6
-1,2*4,8
-1,2*5,10
-0,French
-1,bonjour,hello
-1,livre,book
-1,au revoir,goodbye
-1,anglais,english
+1,2+2,4
+1,2+3,5
+1,2+4,6
+0,History
+1,In what year did India gain its independence from Britain?,1947
+1,In the 1984 vice presidential debates who was George H.W. Bush's opponent?,Geraldine Ferraro

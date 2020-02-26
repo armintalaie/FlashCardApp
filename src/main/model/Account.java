@@ -122,7 +122,5 @@ public class Account implements Saveable {
                 printWriter.println(card.getBack());
             }
         }
-
-
     }
 }
