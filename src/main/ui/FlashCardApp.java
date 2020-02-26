@@ -18,8 +18,6 @@ public class FlashCardApp {
     // TODO: better deck and flash card ui
     // TODO: add clear back navigation to the ui
     // TODO: further steps after trying to add a flashcard that already exists
-    // TODO: make sure every method has proper documentation
-
 
     // TODO: --EXTRA-- add passwords to accounts
     // TODO: --EXTRA-- ability to move cards between decks
@@ -36,7 +34,7 @@ public class FlashCardApp {
         runApp();
     }
 
-    // MODIFIES: this
+    // MODIFIES: THIS
     // EFFECTS: creates account with input as name an runs the app to read input
     private void runApp() {
         boolean keepGoing = initialAccountSetUp();
@@ -52,6 +50,9 @@ public class FlashCardApp {
         }
     }
 
+    // Gets input and decides whether to load or create account
+    // MODIFIES: THIS
+    // EFFECTS: creates account with input as name an runs the app to read input or load account with input
     private boolean initialAccountSetUp() {
         System.out.println("Hello\nDo you want to create or load an account?");
         while (true) {
@@ -73,6 +74,9 @@ public class FlashCardApp {
         return true;
     }
 
+    // Creates account
+    // MODIFIES: THIS
+    // EFFECTS: creates account with input as name an runs the app to read input
     private boolean createAccount() {
         System.out.println("Awesome! What's your name?");
         String name = scanner.nextLine();
@@ -86,6 +90,9 @@ public class FlashCardApp {
         }
     }
 
+    // Sets keys to commands
+    // MODIFIES: THIS
+    // EFFECTS: creates hashmap with keys for commands
     private void commandToNumberRef(HashMap<String, Integer> commands) {
         commands.put("create a deck", 1);
         commands.put("create a flashcard", 2);
@@ -114,7 +121,7 @@ public class FlashCardApp {
 
     }
 
-    // EFFECTS: calls the right method based on the input
+    // EFFECTS: calls the right method based on the input. returns false if user quits. otherwise true
     private boolean readCommand(int command) {
 
         if (command == 1) {
@@ -135,6 +142,9 @@ public class FlashCardApp {
         return true;
     }
 
+    // Saves account
+    // MODIFIES: Account folder
+    // EFFECTS: saves account to STORED_ACCOUNTS path as a text file
     private void saveAccount(Account account) {
 
         try {
@@ -147,6 +157,10 @@ public class FlashCardApp {
         }
     }
 
+    // Loads account
+    // MODIFIES: THIS
+    // EFFECTS: loads account from STORED_ACCOUNTS path and user's name as a text file. returns true if found, false if
+    // no account existed
     private boolean loadAccount() {
         System.out.println("Please type your account's name");
         while (true) {
