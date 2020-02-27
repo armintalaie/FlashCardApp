@@ -15,10 +15,6 @@ import java.util.Scanner;
 
 // Flash Card Application
 public class FlashCardApp {
-    // TODO: better deck and flash card ui
-    // TODO: add clear back navigation to the ui
-    // TODO: further steps after trying to add a flashcard that already exists
-
     // TODO: --EXTRA-- add passwords to accounts
     // TODO: --EXTRA-- ability to move cards between decks
 
@@ -127,7 +123,7 @@ public class FlashCardApp {
         if (command == 1) {
             createDeck();
         } else if (command == 2) {
-            creatFlashCard();
+            createAndAddCard();
         } else if (command == 3) {
             allDecksManagement();
         } else if (command == 4) {
@@ -187,7 +183,7 @@ public class FlashCardApp {
             if (command.contains("back")) {
                 return;
             }
-            if (command.contains("remove")) {
+            if (command.contains("remove") || Integer.toString(account.numberOfDecks() + 1).equals(command)) {
                 if (!account.removeDeck(account.findDeck(command.replace("remove ", "")))) {
                     System.out.println("no such deck");
                     continue;
@@ -209,8 +205,10 @@ public class FlashCardApp {
 
     // EFFECTS: prints a message and all decks
     private void printDeckOptions() {
-        System.out.println("options : type remove + deck name to remove it or the deck name to see the answer");
-        printAllDecks(account);
+        System.out.println("options: ");
+        System.out.println("a) type deck to see it \nb)remove + deck name to remove it \nc) back to go to menu\n");
+        int removeIndex = printAllDecks(account);
+        //System.out.println(removeIndex + ". Delete a deck ");
     }
 
     // REQUIRES : deck is not null
@@ -220,7 +218,8 @@ public class FlashCardApp {
 
         while (true) {
             showAllCards(deck.getCards());
-            System.out.println("options : type remove + card name to remove it or cards to select one");
+            System.out.println("options: \na) type choose to select a card");
+            System.out.println("b)remove + card name to remove it \nc) back\n");
             String command = scanner.nextLine();
 
             if (command.contains("remove")) {
@@ -243,7 +242,8 @@ public class FlashCardApp {
     // EFFECTS: prints all cards in deck and by typing a correct card you can see an answer
     // otherwise you will get an error message
     private void chooseFlashCard(Deck deck) {
-
+        System.out.println("options: \na) type card to see its answer");
+        System.out.println("b) back\n");
         showAllCards(deck.getCards());
         String command = scanner.nextLine();
         while (true) {
@@ -271,31 +271,39 @@ public class FlashCardApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: THIS
     // EFFECTS: creates a flashcard from inputs for front and back and adds them to a previously created deck
-    private void creatFlashCard() {
-        boolean keepGoing = true;
+    private void createAndAddCard() {
+        FlashCard flashCard = createCard();
+        System.out.println("card successfully made. which deck do you want ot add it to?");
+        while (true) {
+            printAllDecks(account);
+            String command = scanner.nextLine();
+            if (command.equals("back")) {
+                return;
+            }
+            Deck deck = account.findDeck(command);
+
+            if (deck != null) {
+                if (deck.addCard(flashCard)) {
+                    System.out.println("Flashcard successfully added to " + deck.getName());
+                    return;
+                } else {
+                    System.out.println("Flashcard exists. choose another deck or type back to return to menu");
+                }
+            } else {
+                System.out.println("No deck with that name. try again type back to return to menu");
+            }
+        }
+    }
+
+    // EFFECTS: creates a flashcard from inputs for front and back and returns it
+    private FlashCard createCard() {
         System.out.println("Enter Flashcard's Front");
         String front = scanner.nextLine();
         System.out.println("Enter Flashcard's back");
         String back = scanner.nextLine();
-        FlashCard flashCard = new FlashCard(front, back);
-        System.out.println("card successfully made. which deck do you want ot add it to?");
-        while (keepGoing) {
-            printAllDecks(account);
-            Deck deck = account.findDeck(scanner.nextLine());
-
-            if (deck != null) {
-                if (deck.addCard(flashCard)) {
-                    keepGoing = false;
-                    System.out.println("Flashcard successfully added to " + deck.getName());
-                } else {
-                    System.out.println("Flashcard exists. choose another deck");
-                }
-            } else {
-                System.out.println("No deck with that name. try again");
-            }
-        }
+        return new FlashCard(front, back);
     }
 
 
@@ -312,12 +320,14 @@ public class FlashCardApp {
     }
 
     // EFFECTS: prints the name of all decks currently active
-    private void printAllDecks(Account account) {
+    private int printAllDecks(Account account) {
         ArrayList<Deck> decks = account.getDecks();
-
+        int i = 1;
         for (Deck d : decks) {
-            System.out.println(d.getName());
+
+            System.out.println(i++ + ". " + d.getName());
         }
+        return i;
     }
 
 }
