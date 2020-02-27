@@ -37,21 +37,19 @@ public class Reader {
 
         for (String line : fileContent) {
             ArrayList<String> lineComponents = splitString(line);
-            switch (Integer.parseInt(lineComponents.get(0))) {
-                case 2: {
-                    account = new Account(lineComponents.get(1));
-                    break;
-                }
-                case 0: {
-                    deck = new Deck(lineComponents.get(1));
-                    account.addDeck(deck);
-                    break;
-                }
-                case 1: {
-                    deck.addCard(new FlashCard(lineComponents.get(1), lineComponents.get(2)));
-                    break;
-                }
+            int firstNum = Integer.parseInt(lineComponents.get(0));
+
+            if (firstNum == 2) {
+                account = new Account(lineComponents.get(1));
             }
+            if (firstNum == 0) {
+                deck = new Deck(lineComponents.get(1));
+                account.addDeck(deck);
+            }
+            if (firstNum == 1) {
+                deck.addCard(new FlashCard(lineComponents.get(1), lineComponents.get(2)));
+            }
+
         }
         return account;
     }
