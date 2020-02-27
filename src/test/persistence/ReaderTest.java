@@ -14,6 +14,12 @@ public class ReaderTest {
     private static String saveFile = "data/samplefile2";
 
     @Test
+    void testReaderConstructor(){
+        new Reader();
+        // according to the @637 piazza
+    }
+
+    @Test
     void parseContent() {
         try {
             Account accountRead = Reader.readAccounts(new File(saveFile));
