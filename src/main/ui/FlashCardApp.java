@@ -16,6 +16,8 @@ import java.util.Scanner;
 // Flash Card Application
 public class FlashCardApp {
     // TODO: --EXTRA-- add passwords to accounts
+
+
     // TODO: --EXTRA-- ability to move cards between decks
 
     private static String STORED_ACCOUNTS = "data/Accounts/";
@@ -328,6 +330,10 @@ public class FlashCardApp {
             System.out.println(i++ + ". " + d.getName());
         }
         return i;
+    }
+
+    public Account getAccount() {
+        return account;
     }
 
 }
