@@ -16,11 +16,9 @@ import java.util.Scanner;
 // Flash Card Application
 public class FlashCardApp {
     // TODO: --EXTRA-- add passwords to accounts
-
-
     // TODO: --EXTRA-- ability to move cards between decks
 
-    private static String STORED_ACCOUNTS = "data/Accounts/";
+    public static String STORED_ACCOUNTS = "data/Accounts/";
     private Account account;
     private Scanner scanner = new Scanner(System.in);
     private HashMap<String, Integer> commands;
