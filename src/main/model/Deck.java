@@ -82,5 +82,14 @@ public class Deck {
         }
         return null;
     }
+
+    public FlashCard findCardWithBack(String back) {
+        for (FlashCard card : this.cards) {
+            if (card.getBack().equals(back)) {
+                return card;
+            }
+        }
+        return null;
+    }
 }
 
