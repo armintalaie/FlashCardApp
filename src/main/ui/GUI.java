@@ -1,13 +1,21 @@
 package ui;
 
-import javafx.animation.RotateTransition;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -18,7 +26,10 @@ import persistence.Reader;
 import persistence.Writer;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GUI extends Application {
 
@@ -33,24 +44,98 @@ public class GUI extends Application {
     private FlashCard pendingCard = null;
     private boolean deleteMode = false;
     private Button selected = null;
+    private boolean darkMode = false;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
         Pane group = new Pane();
         mainBox = new HBox();
         leftVbx = makeMainVBoxes();
         rightVbx = makeMainVBoxes();
         centerVbx = makeMainVBoxes();
-        mainBox.setStyle("-fx-background-color: #6699ff");
         mainBox.getChildren().addAll(leftVbx, centerVbx, rightVbx);
         group.getChildren().add(mainBox);
         Scene scene = new Scene(group, WIDTH, HEIGHT);
-
+        Circle cir2 = new Circle(WIDTH - 40, HEIGHT - 40, 30);
+        darkModeButton(cir2);
+        group.getChildren().add(cir2);
         primaryStage.setScene(scene);
         primaryStage.show();
         launchButton();
         stage = primaryStage;
+        mainScreenAnimation();
     }
+
+    private void darkModeButton(Circle cir2) throws FileNotFoundException {
+        Image image = new Image(new FileInputStream("data/moon.png"));
+        Image image1 = new Image(new FileInputStream("data/sun.png"));
+        cir2.setFill(new ImagePattern(image));
+        cir2.setEffect(new DropShadow(+25d, 0d, +2d, Color.DARKSEAGREEN));
+        cir2.setOnMouseClicked(event -> {
+            if (darkMode) {
+                cir2.setFill(new ImagePattern(image));
+            } else {
+                cir2.setFill(new ImagePattern(image1));
+            }
+            rightVbx.getChildren().clear();
+            try {
+                leftVbx.getChildren().remove(1, leftVbx.getChildren().size());
+            } catch (Exception e) {
+                leftVbx.getChildren().clear();
+            }
+
+            darkMode = !darkMode;
+
+        });
+
+    }
+
+    private void mainScreenAnimation() {
+        final Animation animation = new Transition() {
+
+            {
+                setCycleDuration(Duration.millis(5000));
+                setInterpolator(Interpolator.LINEAR);
+                setAutoReverse(true);
+                setCycleCount(Timeline.INDEFINITE);
+            }
+
+            @Override
+            protected void interpolate(double frac) {
+                ArrayList<Integer> colors = checkDarkAndDelete();
+
+                Color e = Color.rgb((int) (colors.get(0) - frac * 20), (int) (colors.get(1) - frac * 20),
+                        (int) (colors.get(2) - frac * 20));
+                mainBox.setBackground(new Background(new BackgroundFill(e, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        };
+        animation.play();
+    }
+
+    private ArrayList<Integer> checkDarkAndDelete() {
+        int startR = 102;
+        int startG = 153;
+        int startB = 253;
+
+        if (deleteMode) {
+            startR = 240;
+            startG = 148;
+            startB = 105;
+        }
+
+        if (darkMode) {
+            startR = 28;
+            startG = 48;
+            startB = 84;
+        }
+        ArrayList<Integer> b = new ArrayList<>();
+        b.add(startR);
+        b.add(startG);
+        b.add(startB);
+
+        return b;
+    }
+
 
     private VBox makeMainVBoxes() {
         VBox vbox = new VBox();
@@ -93,7 +178,6 @@ public class GUI extends Application {
                 String name = textField.getText();
                 if (!new File(FlashCardApp.STORED_ACCOUNTS + name).exists()) {
                     createAccount(name);
-                    System.out.println("Welcome " + account.getName() + "!");
                 } else {
                     accountError(true);
                     centerVbx.getChildren().remove(textField);
@@ -274,27 +358,23 @@ public class GUI extends Application {
     private void deckButtonDesign(Button button) {
         if (selected != null && button.getText().equals(selected.getText())) {
             button.setPrefSize(360, 100);
-            button.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                    + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
-                    + "-fx-font-weight: bold;\n"
-                    + "-fx-font-size: 50px;\n"
-                    + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
-                    + "-fx-border-radius: 10;\n"
-                    + "-fx-background-radius: 10;\n"
-                    + "-fx-text-fill: #FFFFFF;\n");
         } else {
             button.setPrefSize(300, 80);
-            button.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                    + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
-                    + "-fx-font-weight: bold;\n"
-                    + "-fx-font-size: 40px;\n"
-                    + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
-                    + "-fx-border-radius: 10;\n"
-                    + "-fx-background-radius: 10;\n"
-                    + "-fx-text-fill: #FFFFFF;\n");
         }
-        button.setAlignment(Pos.CENTER);
 
+        String color = "#b3d9ff";
+        if (darkMode) {
+            color = "#445573";
+        }
+        button.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
+                + "-fx-border-color: " + color + "; -fx-padding:3px;\n"
+                + "-fx-font-weight: bold;\n"
+                + "-fx-font-size: 50px;\n"
+                + "-fx-background-color: linear-gradient(" + color + ", " + color + ");\n"
+                + "-fx-border-radius: 10;\n"
+                + "-fx-background-radius: 10;\n"
+                + "-fx-text-fill: #FFFFFF;\n");
+        button.setAlignment(Pos.CENTER);
     }
 
     private void makeCardBoxes(Deck deck) {
@@ -313,11 +393,15 @@ public class GUI extends Application {
         Button button1 = new Button(front);
         button1.setPrefSize(500, 120);
         button1.setAlignment(Pos.CENTER);
+        String color = "#b3d9ff";
+        if (darkMode) {
+            color = "#445573";
+        }
         button1.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
+                + "-fx-border-color: " + color + "; -fx-padding:3px;\n"
                 + "-fx-font-weight: bold;\n"
                 + "-fx-font-size: 60px;\n"
-                + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
+                + "-fx-background-color: linear-gradient(" + color + ", " + color + ");\n"
                 + "-fx-border-radius: 10;\n"
                 + "-fx-background-radius: 10;\n"
                 + "-fx-text-fill: #FFFFFF;\n");
@@ -460,7 +544,6 @@ public class GUI extends Application {
             Writer writer = new Writer(new File(FlashCardApp.STORED_ACCOUNTS + account.getName()));
             writer.write(account);
             writer.close();
-            System.out.println("saved successfully");
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "saved successfully :))");
             alert.show();
         } catch (IOException e) {
@@ -513,6 +596,18 @@ public class GUI extends Application {
 
     private Button makeAButton(String text) {
         Button button = new Button(text);
+        mainButtonDesign(button);
+
+        button.setOnMouseEntered(event -> mainButtonAnimation(button, 3));
+
+        button.setOnMouseExited(event -> mainButtonAnimation(button, -4));
+
+        return button;
+    }
+
+    private void mainButtonDesign(Button button) {
+        button.setMinSize(280, 60);
+        button.setMaxSize(380, 70);
         button.setPrefSize(280, 60);
         button.setStyle("-fx-background-color: linear-gradient(#00e6e6, #00ffff);\n"
                 + "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.3) , 2, 1.0 , 1 , 5 );\n"
@@ -521,10 +616,29 @@ public class GUI extends Application {
                 + "-fx-background-insets: 0,1,2,3,0;\n"
                 + "-fx-text-fill: #654b00;\n"
                 + "-fx-font-weight: bold;\n"
-                + "-fx-font-size: 20px;\n"
+                + "-fx-font-size: 25px;\n"
                 + "-fx-padding: 10 20 10 20;");
 
-        return button;
+    }
+
+    private void mainButtonAnimation(Button button, int i) {
+        Animation animation = new Transition() {
+
+            {
+                setCycleDuration(Duration.millis(400));
+                setInterpolator(Interpolator.LINEAR);
+
+            }
+
+            @Override
+            protected void interpolate(double frac) {
+                if (i == 1 && button.getWidth() == button.getMaxWidth()) {
+                    stop();
+                }
+                button.setPrefSize(button.getWidth() + i * frac, button.getHeight() + i * frac);
+            }
+        };
+        animation.play();
     }
 
     private VBox makeVBox() {

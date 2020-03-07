@@ -35,3 +35,5 @@ some very good and some very basic.
 - As a user, I want to be able to save my account which contains decks and cards
 - As a user, I want to be the app to save my account automatically when I quit the app
 - As a user, I want to be able to optionally load my saved decks and cards when I type my name
+
+- As a user, I want to be able to switch to dark mode and normal 
