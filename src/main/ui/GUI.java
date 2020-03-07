@@ -1,16 +1,15 @@
 package ui;
 
+import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Account;
 import model.Deck;
 import model.FlashCard;
@@ -30,9 +29,13 @@ public class GUI extends Application {
     private VBox centerVbx;
     private VBox rightVbx;
     private HBox mainBox;
+    private FlashCard pendingCard = null;
+    private boolean deleteMode = false;
+    private Button selected = null;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Pane group = new Pane();
         mainBox = new HBox();
         leftVbx = new VBox();
         rightVbx = new VBox();
@@ -45,11 +48,16 @@ public class GUI extends Application {
         leftVbx.setAlignment(Pos.TOP_CENTER);
         mainBox.setStyle("-fx-background-color: #6699ff");
         mainBox.getChildren().addAll(leftVbx, centerVbx, rightVbx);
-        Scene scene = new Scene(mainBox, WIDTH, HEIGHT);
+        group.getChildren().add(mainBox);
+        Scene scene = new Scene(group, WIDTH, HEIGHT);
 
         primaryStage.setScene(scene);
         primaryStage.show();
+        launchButton();
+        stage = primaryStage;
+    }
 
+    private void launchButton() {
         Button button = makeAButton("Launch App");
         button.setAlignment(Pos.CENTER);
         centerVbx.getChildren().add(button);
@@ -58,10 +66,6 @@ public class GUI extends Application {
             makeIntroMenu();
             centerVbx.getChildren().remove(button);
         });
-
-
-        stage = primaryStage;
-
     }
 
 
@@ -113,6 +117,14 @@ public class GUI extends Application {
 
     private TextField makeTextField() {
         TextField textField = new TextField();
+        textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
+                + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
+                + "-fx-font-weight: bold;\n"
+                + "-fx-font-size: 60px;\n"
+                + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
+                + "-fx-border-radius: 10;\n"
+                + "-fx-background-radius: 10;\n"
+                + "-fx-text-fill: #FFFFFF;\n");
         return textField;
     }
 
@@ -148,9 +160,7 @@ public class GUI extends Application {
     }
 
     private void createAllDecksButton(Button decks) {
-        decks.setOnMouseClicked(event -> {
-            showAllDecks();
-        });
+        decks.setOnMouseClicked(event -> showAllDecks());
     }
 
     private void showAllDecks() {
@@ -158,29 +168,47 @@ public class GUI extends Application {
             mainBox.getChildren().remove(1, 3);
             mainBox.getChildren().addAll(rightVbx, centerVbx);
         }
-
+        Button edit;
+        if (deleteMode) {
+            edit = makeAButton("Done");
+        } else {
+            edit = makeAButton("Edit");
+        }
+        createEditButton(edit);
         VBox vbox = makeVBox();
+
         removeDecks();
-
         for (Deck deck : this.account.getDecks()) {
-
             Button button = new Button(deck.getName());
-            button.setPrefSize(300, 80);
-            button.setAlignment(Pos.CENTER);
-            button.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                    + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
-                    + "-fx-font-weight: bold;\n"
-                    + "-fx-font-size: 40px;\n"
-                    + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
-                    + "-fx-border-radius: 10;\n"
-                    + "-fx-background-radius: 10;\n"
-                    + "-fx-text-fill: #FFFFFF;\n");
+            deckButtonDesign(button);
             deckManageButton(button);
             vbox.getChildren().add(button);
         }
-
+        vbox.getChildren().add(edit);
         leftVbx.getChildren().add(vbox);
         vbox.setAlignment(Pos.CENTER);
+    }
+
+    private void createEditButton(Button button) {
+        button.setOnMouseClicked(event -> {
+            if (!deleteMode) {
+                deleteMode = true;
+                button.setText("Done");
+                showAllDecks();
+            } else {
+                deleteMode = false;
+                button.setText("Edit");
+            }
+        });
+        button.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
+                + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
+                + "-fx-font-weight: bold;\n"
+                + "-fx-font-size: 40px;\n"
+                + "-fx-background-color: linear-gradient(#e63054, #c91c3e);\n"
+                + "-fx-border-radius: 10;\n"
+                + "-fx-background-radius: 10;\n"
+                + "-fx-text-fill: #FFFFFF;\n");
+
     }
 
     private void removeDecks() {
@@ -203,26 +231,84 @@ public class GUI extends Application {
 
     }
 
-    private void deckManageButton(Button button) {
+    private boolean deleteDeckDialogue(Deck deck) {
+        if (deleteMode) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "are you sure you want to delete "
+                    + deck.getName() + " and the cards in it?");
+            alert.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                    this.account.removeDeck(deck);
+                    showAllDecks();
+                    rightVbx.getChildren().clear();
+                }
+            });
+            return true;
+        }
+        return false;
+    }
 
+    private void deckManageButton(Button button) {
         button.setOnMouseClicked(event -> {
             Deck deck = this.account.findDeck(button.getText());
-            VBox vbox = makeVBox();
-            removeCards();
-
-            for (FlashCard card : deck.getCards()) {
-
-                Button button1 = showCard(card.getFront(), card.getBack());
-
-                vbox.getChildren().add(button1);
+            if (deleteDeckDialogue(deck)) {
+                return;
             }
-            rightVbx.getChildren().add(vbox);
-            vbox.setAlignment(Pos.TOP_CENTER);
-
+            deckSelected(button);
+            if (pendingCard != null) {
+                if (!deck.addCard(pendingCard)) {
+                    return;
+                }
+                pendingCard = null;
+            }
+            makeCardBoxes(deck);
         });
     }
 
-    private Button showCard(String front, String back) {
+    private void deckSelected(Button button) {
+        selected = button;
+        showAllDecks();
+    }
+
+
+    private void deckButtonDesign(Button button) {
+        if (selected != null && button.getText().equals(selected.getText())) {
+            button.setPrefSize(360, 100);
+            button.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
+                    + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
+                    + "-fx-font-weight: bold;\n"
+                    + "-fx-font-size: 50px;\n"
+                    + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
+                    + "-fx-border-radius: 10;\n"
+                    + "-fx-background-radius: 10;\n"
+                    + "-fx-text-fill: #FFFFFF;\n");
+        } else {
+            button.setPrefSize(300, 80);
+            button.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
+                    + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
+                    + "-fx-font-weight: bold;\n"
+                    + "-fx-font-size: 40px;\n"
+                    + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
+                    + "-fx-border-radius: 10;\n"
+                    + "-fx-background-radius: 10;\n"
+                    + "-fx-text-fill: #FFFFFF;\n");
+        }
+        button.setAlignment(Pos.CENTER);
+
+    }
+
+    private void makeCardBoxes(Deck deck) {
+        VBox vbox = makeVBox();
+        removeCards();
+
+        for (FlashCard card : deck.getCards()) {
+            Button button1 = showCard(card.getFront(), card.getBack(), deck);
+            vbox.getChildren().add(button1);
+        }
+        rightVbx.getChildren().add(vbox);
+        vbox.setAlignment(Pos.TOP_CENTER);
+    }
+
+    private Button showCard(String front, String back, Deck deck) {
         Button button1 = new Button(front);
         button1.setPrefSize(500, 120);
         button1.setAlignment(Pos.CENTER);
@@ -234,20 +320,54 @@ public class GUI extends Application {
                 + "-fx-border-radius: 10;\n"
                 + "-fx-background-radius: 10;\n"
                 + "-fx-text-fill: #FFFFFF;\n");
-        cardManageButton(button1, front, back);
+        cardManageButton(button1, front, back, deck);
         return button1;
 
     }
 
-    private void cardManageButton(Button button, String front, String back) {
+
+    private void cardManageButton(Button button, String front, String back, Deck deck) {
         button.setOnMouseClicked(event -> {
+
+
+            deleteCardDialogue(front, back, deck);
+
+            RotateTransition rt = new RotateTransition(Duration.millis(900), button);
+            rt.setAxis(Rotate.Y_AXIS);
+            rt.setByAngle(90);
+
+            rt.setAutoReverse(false);
+
+            rt.play();
+            rt.stop();
             if (button.getText().equals(front)) {
                 button.setText(back);
+                button.setScaleX(-1);
             } else if (button.getText().equals(back)) {
                 button.setText(front);
             }
-        });
+            RotateTransition rt1 = new RotateTransition(Duration.millis(500), button);
+            rt1.setAxis(Rotate.Y_AXIS);
+            rt1.setFromAngle(90);
+            rt1.setByAngle(90);
 
+            rt1.setAutoReverse(false);
+            rt1.play();
+        });
+    }
+
+    private void deleteCardDialogue(String front, String back, Deck deck) {
+        if (deleteMode) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "are you sure you want to delete this card?");
+            alert.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                    deck.removeCard(front);
+                    showAllDecks();
+                    makeCardBoxes(deck);
+                }
+            });
+        }
     }
 
     private void createCardButton(Button createCard) {
@@ -258,15 +378,7 @@ public class GUI extends Application {
             textField.setAlignment(Pos.CENTER);
             rightVbx.getChildren().clear();
             rightVbx.getChildren().add(textField);
-
-            textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                    + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
-                    + "-fx-font-weight: bold;\n"
-                    + "-fx-font-size: 60px;\n"
-                    + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
-                    + "-fx-border-radius: 10;\n"
-                    + "-fx-background-radius: 10;\n"
-                    + "-fx-text-fill: #FFFFFF;\n");
+            textFieldStyle(textField);
             textField.setOnAction(event1 -> {
                 String front = textField.getText();
                 textField.deleteText(0, textField.getText().length());
@@ -274,29 +386,32 @@ public class GUI extends Application {
                     String back = textField.getText();
                     addCardToDeck(front, back);
                 });
-
-
             });
-
-
         });
     }
 
+    private void textFieldStyle(TextField textField) {
+        textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
+                + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
+                + "-fx-font-weight: bold;\n"
+                + "-fx-font-size: 60px;\n"
+                + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
+                + "-fx-border-radius: 10;\n"
+                + "-fx-background-radius: 10;\n"
+                + "-fx-text-fill: #FFFFFF;\n");
+    }
+
     private void addCardToDeck(String front, String back) {
-        Button button = showCard(front, back);
+        Button button = showCard(front, back, null);
         rightVbx.getChildren().clear();
         rightVbx.getChildren().add(button);
-        button.setOnDragDetected(event -> {
-            button.setTranslateX(event.getX());
-            System.out.println(event.getTarget());
-            System.out.println(event.getX());
-            System.out.println(event.getClass());
-        });
+        button.setAlignment(Pos.CENTER);
+        pendingCard = new FlashCard(front, back);
+
 
     }
 
     private void loadButton(Button load) {
-
         load.setOnMouseClicked(event -> {
             TextField textField = makeTextField();
             centerVbx.getChildren().clear();
@@ -320,21 +435,22 @@ public class GUI extends Application {
 
 
     private void saveButton(Button save) {
-        save.setOnMouseClicked(event -> {
-            try {
-                Writer writer = new Writer(new File(FlashCardApp.STORED_ACCOUNTS + account.getName()));
-                writer.write(account);
-                writer.close();
-                System.out.println("saved successfully");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION,"saved successfully :))");
-                alert.show();
-            } catch (IOException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR,"could not save :((");
-                alert.showAndWait();
-                makeIntroMenu();
+        save.setOnMouseClicked(event -> saveAccount());
+    }
 
-            }
-        });
+    private void saveAccount() {
+        try {
+            Writer writer = new Writer(new File(FlashCardApp.STORED_ACCOUNTS + account.getName()));
+            writer.write(account);
+            writer.close();
+            System.out.println("saved successfully");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "saved successfully :))");
+            alert.show();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "could not save :((");
+            alert.showAndWait();
+            makeIntroMenu();
+        }
     }
 
     private void moveMenu() {
@@ -353,42 +469,30 @@ public class GUI extends Application {
     private void createDeckButton(Button createDeck) {
         createDeck.setOnMouseClicked(event -> {
             moveMenu();
-
             TextField textField = new TextField();
             textField.setPrefSize(500, 120);
             textField.setAlignment(Pos.CENTER);
             rightVbx.getChildren().clear();
             rightVbx.getChildren().add(textField);
-
-            textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                    + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
-                    + "-fx-font-weight: bold;\n"
-                    + "-fx-font-size: 60px;\n"
-                    + "-fx-background-color: linear-gradient(#b3d9ff, #b3d9ff);\n"
-                    + "-fx-border-radius: 10;\n"
-                    + "-fx-background-radius: 10;\n"
-                    + "-fx-text-fill: #FFFFFF;\n");
+            textFieldStyle(textField);
             textField.setOnAction(event1 -> {
                 if (this.account.makeDeck(textField.getText())) {
                     showAllDecks();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Deck with that name exists");
                     alert.showAndWait();
-
                 }
                 rightVbx.getChildren().clear();
             });
-
-
         });
     }
 
     private void quitButton(Button quit) {
         quit.setOnMouseClicked(event -> {
+            saveAccount();
             stage.close();
         });
     }
-
 
     private Button makeAButton(String text) {
         Button button = new Button(text);
@@ -411,6 +515,4 @@ public class GUI extends Application {
         vbox.setSpacing(30);
         return vbox;
     }
-
-
 }
