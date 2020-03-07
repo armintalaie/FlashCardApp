@@ -4,6 +4,7 @@ import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -37,15 +38,9 @@ public class GUI extends Application {
     public void start(Stage primaryStage) {
         Pane group = new Pane();
         mainBox = new HBox();
-        leftVbx = new VBox();
-        rightVbx = new VBox();
-        centerVbx = new VBox();
-        rightVbx.setPrefSize(WIDTH / 3, HEIGHT);
-        rightVbx.setAlignment(Pos.CENTER);
-        centerVbx.setPrefSize(WIDTH / 3, HEIGHT);
-        centerVbx.setAlignment(Pos.CENTER);
-        leftVbx.setPrefSize(WIDTH / 3, HEIGHT);
-        leftVbx.setAlignment(Pos.TOP_CENTER);
+        leftVbx = makeMainVBoxes();
+        rightVbx = makeMainVBoxes();
+        centerVbx = makeMainVBoxes();
         mainBox.setStyle("-fx-background-color: #6699ff");
         mainBox.getChildren().addAll(leftVbx, centerVbx, rightVbx);
         group.getChildren().add(mainBox);
@@ -55,6 +50,13 @@ public class GUI extends Application {
         primaryStage.show();
         launchButton();
         stage = primaryStage;
+    }
+
+    private VBox makeMainVBoxes() {
+        VBox vbox = new VBox();
+        vbox.setPrefSize(WIDTH / 3, HEIGHT);
+        vbox.setAlignment(Pos.CENTER);
+        return vbox;
     }
 
     private void launchButton() {
@@ -74,7 +76,6 @@ public class GUI extends Application {
         centerVbx.getChildren().add(vbox);
         vbox.setAlignment(Pos.CENTER);
         Button create = makeAButton("Create an account");
-
         Button load = makeAButton("Load an account");
         vbox.getChildren().addAll(create, load);
 
@@ -332,27 +333,15 @@ public class GUI extends Application {
 
             deleteCardDialogue(front, back, deck);
 
-            RotateTransition rt = new RotateTransition(Duration.millis(900), button);
-            rt.setAxis(Rotate.Y_AXIS);
-            rt.setByAngle(90);
+            rotate90Deg(button, 0);
 
-            rt.setAutoReverse(false);
-
-            rt.play();
-            rt.stop();
             if (button.getText().equals(front)) {
                 button.setText(back);
                 button.setScaleX(-1);
             } else if (button.getText().equals(back)) {
                 button.setText(front);
             }
-            RotateTransition rt1 = new RotateTransition(Duration.millis(500), button);
-            rt1.setAxis(Rotate.Y_AXIS);
-            rt1.setFromAngle(90);
-            rt1.setByAngle(90);
-
-            rt1.setAutoReverse(false);
-            rt1.play();
+            rotate90Deg(button, 1);
         });
     }
 
@@ -375,19 +364,46 @@ public class GUI extends Application {
             moveMenu();
             TextField textField = new TextField();
             textField.setPrefSize(500, 120);
-            textField.setAlignment(Pos.CENTER);
             rightVbx.getChildren().clear();
-            rightVbx.getChildren().add(textField);
+            rightVbx.getChildren().addAll(instructionLabels("Enter Card's Front"), textField);
             textFieldStyle(textField);
             textField.setOnAction(event1 -> {
                 String front = textField.getText();
-                textField.deleteText(0, textField.getText().length());
-                textField.setOnAction(event2 -> {
-                    String back = textField.getText();
-                    addCardToDeck(front, back);
-                });
+                Button button1 = showCard(front, "", null);
+                rightVbx.getChildren().clear();
+                rightVbx.getChildren().addAll(instructionLabels("Enter Card's Back"), button1);
+                rotate90Deg(button1, 0);
+                rotate90Deg(button1, 1);
+                textField.clear();
+                rightVbx.getChildren().set(1, textField);
+
+                textField.setOnAction(event2 -> addCardToDeck(front, textField.getText()));
             });
         });
+    }
+
+    private void rotate90Deg(Node node, int second) {
+        RotateTransition rt = new RotateTransition(Duration.millis(300), node);
+        rt.setAxis(Rotate.Y_AXIS);
+        rt.setFromAngle(second * 90);
+        rt.setByAngle(90);
+        rt.setAutoReverse(false);
+        rt.play();
+
+    }
+
+    private Label instructionLabels(String title) {
+        Label label = new Label(title);
+        label.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
+                + " -fx-padding:3px;\n"
+                + "-fx-font-weight: bold;\n"
+                + "-fx-font-size: 40px;\n"
+                + "-fx-border-radius: 10;\n"
+                + "-fx-background-radius: 10;\n"
+                + "-fx-text-fill: #FFFFFF;\n");
+        label.setPadding(new Insets(0, 0, 60, 0));
+        return label;
+
     }
 
     private void textFieldStyle(TextField textField) {
@@ -399,6 +415,7 @@ public class GUI extends Application {
                 + "-fx-border-radius: 10;\n"
                 + "-fx-background-radius: 10;\n"
                 + "-fx-text-fill: #FFFFFF;\n");
+        textField.setAlignment(Pos.CENTER);
     }
 
     private void addCardToDeck(String front, String back) {
