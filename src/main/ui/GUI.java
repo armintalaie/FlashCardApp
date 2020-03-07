@@ -34,7 +34,7 @@ public class GUI extends Application {
     private Button selected = null;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         Pane group = new Pane();
         mainBox = new HBox();
         leftVbx = new VBox();
