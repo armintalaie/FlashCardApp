@@ -32,6 +32,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GUI extends Application {
+    //TODO: add audiovisual elements
+    //TODO: add readme step by step instructions to use app
+    //TODO: resizing windows
+    //TODO: able to make text smaller for longer texts
+    //TODO: add documentation
 
     private static final int WIDTH = 1600;
     private static final int HEIGHT = 900;
@@ -117,16 +122,16 @@ public class GUI extends Application {
         int startG = 153;
         int startB = 253;
 
-        if (deleteMode) {
-            startR = 240;
-            startG = 148;
-            startB = 105;
-        }
-
         if (darkMode) {
             startR = 28;
             startG = 48;
             startB = 84;
+        }
+
+        if (deleteMode) {
+            startR = 240;
+            startG = 148;
+            startB = 105;
         }
         ArrayList<Integer> b = new ArrayList<>();
         b.add(startR);
