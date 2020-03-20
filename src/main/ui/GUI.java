@@ -24,16 +24,14 @@ import model.Deck;
 import model.FlashCard;
 import persistence.Reader;
 import persistence.Writer;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 // GUI for Flash Card Application
 public class GUI extends Application {
-    //TODO: add audiovisual elements
     //TODO: add readme step by step instructions to use app
     //TODO: resizing windows
     //TODO: able to make text smaller for longer texts
@@ -62,6 +60,7 @@ public class GUI extends Application {
         rightVbx = makeMainVBoxes();
         centerVbx = makeMainVBoxes();
         mainBox.getChildren().addAll(leftVbx, centerVbx, rightVbx);
+
         group.getChildren().add(mainBox);
         Scene scene = new Scene(group, WIDTH, HEIGHT);
         Circle cir2 = new Circle(WIDTH - 40, HEIGHT - 40, 30);
@@ -220,6 +219,7 @@ public class GUI extends Application {
     // error for account
     // EFFECTS: shows an alert if account exists or if loading and account doesn't exists
     private void accountError(boolean exists) {
+        playErrorSound();
         if (exists) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "account with that username exists");
             alert.showAndWait();
@@ -229,7 +229,25 @@ public class GUI extends Application {
         }
 
 
+
     }
+
+    // error sound
+    // EFFECTS: plays an error sound
+    private void playErrorSound() {
+
+        try {
+            InputStream in = new FileInputStream("data/error-sound.wav");
+            AudioStream as = new AudioStream(in);
+            AudioPlayer.player.start(as);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     // make textfield
     // EFFECTS: creates textfield with certain design
