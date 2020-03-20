@@ -53,6 +53,9 @@ public class Deck {
         }
     }
 
+    // remove card
+    // MODIFIES: THIS
+    // EFFECTS: removes card with front as its front and returns true. if card doesn't exist return false
     public boolean removeCard(String front) {
         FlashCard card = findCard(front);
         if (card != null) {
@@ -74,6 +77,8 @@ public class Deck {
         return cards.size();
     }
 
+    // finds card
+    // EFFECTS: returns card with front as its front. if it doesn't exist, null
     public FlashCard findCard(String front) {
         for (FlashCard card : this.cards) {
             if (card.getFront().equals(front)) {
@@ -83,6 +88,8 @@ public class Deck {
         return null;
     }
 
+    // finds card with back text
+    // EFFECTS: returns card with back as its back text and null if doesn't exist
     public FlashCard findCardWithBack(String back) {
         for (FlashCard card : this.cards) {
             if (card.getBack().equals(back)) {

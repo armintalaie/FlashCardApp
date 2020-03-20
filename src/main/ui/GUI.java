@@ -31,12 +31,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+// GUI for Flash Card Application
 public class GUI extends Application {
     //TODO: add audiovisual elements
     //TODO: add readme step by step instructions to use app
     //TODO: resizing windows
     //TODO: able to make text smaller for longer texts
-    //TODO: add documentation
 
     private static final int WIDTH = 1600;
     private static final int HEIGHT = 900;
@@ -51,6 +51,9 @@ public class GUI extends Application {
     private Button selected = null;
     private boolean darkMode = false;
 
+    // starts application
+    // MODIFIES: THIS
+    // EFFECTS: creates windows and initial graphics elements
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
         Pane group = new Pane();
@@ -71,6 +74,9 @@ public class GUI extends Application {
         mainScreenAnimation();
     }
 
+    // changes dark mode status
+    // MODIFIES: THIS
+    // EFFECTS: changes moon icon to sun or vice versa and changes the boolean value of darkMode
     private void darkModeButton(Circle cir2) throws FileNotFoundException {
         Image image = new Image(new FileInputStream("data/moon.png"));
         Image image1 = new Image(new FileInputStream("data/sun.png"));
@@ -95,6 +101,9 @@ public class GUI extends Application {
 
     }
 
+    // sets background color
+    // MODIFIES: THIS
+    // EFFECTS: changes background based on mode (light,delete,dark) and slightly shifts color as a type of transition
     private void mainScreenAnimation() {
         final Animation animation = new Transition() {
 
@@ -117,6 +126,9 @@ public class GUI extends Application {
         animation.play();
     }
 
+    // create color combination
+    // MODIFIES: THIS
+    // EFFECTS: creates RGB color for scene based on mode
     private ArrayList<Integer> checkDarkAndDelete() {
         int startR = 102;
         int startG = 153;
@@ -142,6 +154,9 @@ public class GUI extends Application {
     }
 
 
+    // makes V boxes for main screen
+    // MODIFIES: THIS
+    // EFFECTS: creates a v box with WIDTH / 3, HEIGHT
     private VBox makeMainVBoxes() {
         VBox vbox = new VBox();
         vbox.setPrefSize(WIDTH / 3, HEIGHT);
@@ -149,6 +164,9 @@ public class GUI extends Application {
         return vbox;
     }
 
+    // launch button
+    // MODIFIES: THIS
+    // EFFECTS: creates launch button
     private void launchButton() {
         Button button = makeAButton("Launch App");
         button.setAlignment(Pos.CENTER);
@@ -161,6 +179,9 @@ public class GUI extends Application {
     }
 
 
+    // makes main menu
+    // MODIFIES: THIS
+    // EFFECTS: creates main menu with create and load buttons
     private void makeIntroMenu() {
         VBox vbox = makeVBox();
         centerVbx.getChildren().add(vbox);
@@ -173,6 +194,9 @@ public class GUI extends Application {
         loadButton(load);
     }
 
+    //  create account button
+    // MODIFIES: THIS
+    // EFFECTS: creates create account button and when it's pressed
     private void createAccountButton(Button create) {
         create.setOnMouseClicked(event19 -> {
             TextField textField = makeTextField();
@@ -193,6 +217,8 @@ public class GUI extends Application {
         });
     }
 
+    // error for account
+    // EFFECTS: shows an alert if account exists or if loading and account doesn't exists
     private void accountError(boolean exists) {
         if (exists) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "account with that username exists");
@@ -205,6 +231,8 @@ public class GUI extends Application {
 
     }
 
+    // make textfield
+    // EFFECTS: creates textfield with certain design
     private TextField makeTextField() {
         TextField textField = new TextField();
         textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
@@ -218,11 +246,18 @@ public class GUI extends Application {
         return textField;
     }
 
+
+    // create account
+    // MODIFIES: THIS
+    // EFFECTS: creates account
     private void createAccount(String text) {
         account = new Account(text);
         createMenu();
     }
 
+    // intro menu button
+    // MODIFIES: THIS
+    // EFFECTS: creates main buttons for app and layout of screen
     private void createMenu() {
         Label label = new Label("Hi " + this.account.getName() + "!");
         label.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
@@ -249,10 +284,14 @@ public class GUI extends Application {
         vbox.setAlignment(Pos.CENTER);
     }
 
+    // decks button clicked
+    // EFFECTS: shows all buttons if decks is pressed
     private void createAllDecksButton(Button decks) {
         decks.setOnMouseClicked(event -> showAllDecks());
     }
 
+    // all decks
+    // EFFECTS: prints all decks
     private void showAllDecks() {
         if (centerVbx == mainBox.getChildren().get(1)) {
             mainBox.getChildren().remove(1, 3);
@@ -279,6 +318,9 @@ public class GUI extends Application {
         vbox.setAlignment(Pos.CENTER);
     }
 
+    // edit button
+    // MODIFIES: THIS
+    // EFFECTS: edit button design. and changes delete mode when pressed
     private void createEditButton(Button button) {
         button.setOnMouseClicked(event -> {
             if (!deleteMode) {
@@ -301,6 +343,9 @@ public class GUI extends Application {
 
     }
 
+    // hides decks
+    // MODIFIES: THIS
+    // EFFECTS: removes decks from screen
     private void removeDecks() {
         try {
             Label name = (Label) leftVbx.getChildren().get(0);
@@ -312,6 +357,9 @@ public class GUI extends Application {
 
     }
 
+    // hides cards
+    // MODIFIES: THIS
+    // EFFECTS: removes cards from screen
     private void removeCards() {
         try {
             rightVbx.getChildren().clear();
@@ -321,6 +369,9 @@ public class GUI extends Application {
 
     }
 
+    // delete pop up
+    // MODIFIES: THIS
+    // EFFECTS: shows pop up when deleting something to confirm
     private boolean deleteDeckDialogue(Deck deck) {
         if (deleteMode) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "are you sure you want to delete "
@@ -337,6 +388,12 @@ public class GUI extends Application {
         return false;
     }
 
+    // deck button
+    // MODIFIES: THIS
+    // EFFECTS: if a deck is pressed, it will do the following:
+    // if in delete mode will start the process of deleting deck
+    // if there's a card in pending card irt will add it to the deck
+    // otherwise it will shows the cards in the deck on the center v box on the screen
     private void deckManageButton(Button button) {
         button.setOnMouseClicked(event -> {
             Deck deck = this.account.findDeck(button.getText());
@@ -354,12 +411,18 @@ public class GUI extends Application {
         });
     }
 
+    // selected button
+    // MODIFIES: THIS
+    // EFFECTS: sets selected to button and shows all decks
     private void deckSelected(Button button) {
         selected = button;
         showAllDecks();
     }
 
 
+    // deck button design
+    // MODIFIES: THIS
+    // EFFECTS: deck button size and design
     private void deckButtonDesign(Button button) {
         if (selected != null && button.getText().equals(selected.getText())) {
             button.setPrefSize(360, 100);
@@ -382,6 +445,9 @@ public class GUI extends Application {
         button.setAlignment(Pos.CENTER);
     }
 
+    // cards of deck
+    // MODIFIES: THIS
+    // EFFECTS: shows cards of a deck
     private void makeCardBoxes(Deck deck) {
         VBox vbox = makeVBox();
         removeCards();
@@ -394,6 +460,9 @@ public class GUI extends Application {
         vbox.setAlignment(Pos.TOP_CENTER);
     }
 
+    // card button
+    // MODIFIES: THIS
+    // EFFECTS: create card button with design
     private Button showCard(String front, String back, Deck deck) {
         Button button1 = new Button(front);
         button1.setPrefSize(500, 120);
@@ -416,6 +485,9 @@ public class GUI extends Application {
     }
 
 
+    // card button
+    // MODIFIES: THIS
+    // EFFECTS: if card pressed and if in delete mode it will delete card, otherwise flip card
     private void cardManageButton(Button button, String front, String back, Deck deck) {
         button.setOnMouseClicked(event -> {
 
@@ -434,6 +506,9 @@ public class GUI extends Application {
         });
     }
 
+    // delete card alert
+    // MODIFIES: THIS
+    // EFFECTS: creates alert when deleting card to confirm. if not confirmed won't delete
     private void deleteCardDialogue(String front, String back, Deck deck) {
         if (deleteMode) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -448,6 +523,9 @@ public class GUI extends Application {
         }
     }
 
+    // create button
+    // MODIFIES: THIS
+    // EFFECTS: when create button pressed it will take inputs for front and back and adds to center vbox
     private void createCardButton(Button createCard) {
         createCard.setOnMouseClicked(event -> {
             moveMenu();
@@ -471,6 +549,9 @@ public class GUI extends Application {
         });
     }
 
+    // rotate node
+    // MODIFIES: THIS
+    // EFFECTS: rotates node 90 degrees
     private void rotate90Deg(Node node, int second) {
         RotateTransition rt = new RotateTransition(Duration.millis(300), node);
         rt.setAxis(Rotate.Y_AXIS);
@@ -481,6 +562,9 @@ public class GUI extends Application {
 
     }
 
+    // instruction label
+    // MODIFIES: THIS
+    // EFFECTS: creates instruction label when creating card
     private Label instructionLabels(String title) {
         Label label = new Label(title);
         label.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
@@ -495,6 +579,8 @@ public class GUI extends Application {
 
     }
 
+    // textfield design
+    // EFFECTS: a textfield design
     private void textFieldStyle(TextField textField) {
         textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
                 + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
@@ -507,6 +593,9 @@ public class GUI extends Application {
         textField.setAlignment(Pos.CENTER);
     }
 
+    // add card
+    // MODIFIES: THIS
+    // EFFECTS: adds card to pending card to be added to a deck
     private void addCardToDeck(String front, String back) {
         Button button = showCard(front, back, null);
         rightVbx.getChildren().clear();
@@ -517,6 +606,9 @@ public class GUI extends Application {
 
     }
 
+    // load button
+    // MODIFIES: THIS
+    // EFFECTS: when load button presses it will take input and load if account exists otherwise error alert
     private void loadButton(Button load) {
         load.setOnMouseClicked(event -> {
             TextField textField = makeTextField();
@@ -540,10 +632,16 @@ public class GUI extends Application {
     }
 
 
+    // save button
+    // MODIFIES: THIS
+    // EFFECTS: call save method if presses
     private void saveButton(Button save) {
         save.setOnMouseClicked(event -> saveAccount());
     }
 
+    // saves account
+    // MODIFIES: THIS
+    // EFFECTS: saves account and shows message of saves successfully
     private void saveAccount() {
         try {
             Writer writer = new Writer(new File(FlashCardApp.STORED_ACCOUNTS + account.getName()));
@@ -558,6 +656,9 @@ public class GUI extends Application {
         }
     }
 
+    // move button boxes
+    // MODIFIES: THIS
+    // EFFECTS: changes the place of right and center v boxes
     private void moveMenu() {
         if (centerVbx == mainBox.getChildren().get(1)) {
             mainBox.getChildren().remove(1, 3);
@@ -565,12 +666,18 @@ public class GUI extends Application {
         }
     }
 
+    // clear screen
+    // MODIFIES: THIS
+    // EFFECTS: empties vboxes: left,center,right
     private void emptyPage() {
         leftVbx.getChildren().clear();
         rightVbx.getChildren().clear();
         centerVbx.getChildren().clear();
     }
 
+    // create deck button
+    // MODIFIES: THIS
+    // EFFECTS: button if pressed takes input to make deck, if deck exists error otherwise added to account
     private void createDeckButton(Button createDeck) {
         createDeck.setOnMouseClicked(event -> {
             moveMenu();
@@ -592,6 +699,9 @@ public class GUI extends Application {
         });
     }
 
+    // quit button
+    // MODIFIES: THIS
+    // EFFECTS: quit button if pressed will save and close screen
     private void quitButton(Button quit) {
         quit.setOnMouseClicked(event -> {
             saveAccount();
@@ -599,6 +709,8 @@ public class GUI extends Application {
         });
     }
 
+    // makes a button
+    // EFFECTS: return button with text and fixed design
     private Button makeAButton(String text) {
         Button button = new Button(text);
         mainButtonDesign(button);
@@ -610,6 +722,9 @@ public class GUI extends Application {
         return button;
     }
 
+    // main button design
+    // MODIFIES: button
+    // EFFECTS: sets button to specific design
     private void mainButtonDesign(Button button) {
         button.setMinSize(280, 60);
         button.setMaxSize(380, 70);
@@ -626,6 +741,9 @@ public class GUI extends Application {
 
     }
 
+    // button hover
+    // MODIFIES: THIS
+    // EFFECTS: button animation when hovered over
     private void mainButtonAnimation(Button button, int i) {
         Animation animation = new Transition() {
 
@@ -646,6 +764,8 @@ public class GUI extends Application {
         animation.play();
     }
 
+    // makes vbox with spacing
+    // EFFECTS: return vbox
     private VBox makeVBox() {
         VBox vbox = new VBox();
         vbox.setSpacing(30);

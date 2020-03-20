@@ -88,6 +88,15 @@ class DeckTest {
     }
 
     @Test
+    void testFindCardWithBack() {
+
+        deck.addCard(flashCard);
+        assertNull(deck.findCardWithBack(flashCard1.getBack()));
+        assertEquals(deck.findCardWithBack(flashCard.getBack()) , flashCard);
+
+    }
+
+    @Test
     void testGetCards() {
         ArrayList<FlashCard> cards = new ArrayList<>();
 

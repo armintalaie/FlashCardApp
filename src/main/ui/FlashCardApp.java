@@ -330,9 +330,6 @@ public class FlashCardApp {
         return i;
     }
 
-    public Account getAccount() {
-        return account;
-    }
 
 }
 
