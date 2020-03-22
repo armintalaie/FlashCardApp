@@ -16,8 +16,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.Account;
 import model.Deck;
@@ -33,11 +35,10 @@ import java.util.ArrayList;
 // GUI for Flash Card Application
 public class GUI extends Application {
     //TODO: add readme step by step instructions to use app
-    //TODO: resizing windows
     //TODO: able to make text smaller for longer texts
 
-    private static final int WIDTH = 1600;
-    private static final int HEIGHT = 900;
+    private static double WIDTH = 1600;
+    private static double HEIGHT = 900;
     private Account account;
     private Stage stage;
     private VBox leftVbx;
@@ -60,7 +61,6 @@ public class GUI extends Application {
         rightVbx = makeMainVBoxes();
         centerVbx = makeMainVBoxes();
         mainBox.getChildren().addAll(leftVbx, centerVbx, rightVbx);
-
         group.getChildren().add(mainBox);
         Scene scene = new Scene(group, WIDTH, HEIGHT);
         Circle cir2 = new Circle(WIDTH - 40, HEIGHT - 40, 30);
@@ -69,9 +69,11 @@ public class GUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         launchButton();
+        primaryStage.setResizable(false);
         stage = primaryStage;
         mainScreenAnimation();
     }
+
 
     // changes dark mode status
     // MODIFIES: THIS
@@ -105,7 +107,6 @@ public class GUI extends Application {
     // EFFECTS: changes background based on mode (light,delete,dark) and slightly shifts color as a type of transition
     private void mainScreenAnimation() {
         final Animation animation = new Transition() {
-
             {
                 setCycleDuration(Duration.millis(5000));
                 setInterpolator(Interpolator.LINEAR);
@@ -116,7 +117,6 @@ public class GUI extends Application {
             @Override
             protected void interpolate(double frac) {
                 ArrayList<Integer> colors = checkDarkAndDelete();
-
                 Color e = Color.rgb((int) (colors.get(0) - frac * 20), (int) (colors.get(1) - frac * 20),
                         (int) (colors.get(2) - frac * 20));
                 mainBox.setBackground(new Background(new BackgroundFill(e, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -148,7 +148,6 @@ public class GUI extends Application {
         b.add(startR);
         b.add(startG);
         b.add(startB);
-
         return b;
     }
 
@@ -200,18 +199,19 @@ public class GUI extends Application {
         create.setOnMouseClicked(event19 -> {
             TextField textField = makeTextField();
             centerVbx.getChildren().clear();
+            centerVbx.getChildren().add(instructionLabels("Type Your Username"));
             centerVbx.getChildren().add(textField);
 
             textField.setOnAction(event11 -> {
                 String name = textField.getText();
                 if (!new File(FlashCardApp.STORED_ACCOUNTS + name).exists()) {
+                    emptyPage();
                     createAccount(name);
                 } else {
                     accountError(true);
-                    centerVbx.getChildren().remove(textField);
+                    emptyPage();
                     makeIntroMenu();
                 }
-                centerVbx.getChildren().remove(textField);
             });
         });
     }
@@ -227,15 +227,12 @@ public class GUI extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR, "No account with that name exists.");
             alert.showAndWait();
         }
-
-
-
     }
+
 
     // error sound
     // EFFECTS: plays an error sound
     private void playErrorSound() {
-
         try {
             InputStream in = new FileInputStream("data/error-sound.wav");
             AudioStream as = new AudioStream(in);
@@ -244,8 +241,6 @@ public class GUI extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 
@@ -490,14 +485,17 @@ public class GUI extends Application {
             color = "#445573";
         }
         button1.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                + "-fx-border-color: " + color + "; -fx-padding:3px;\n"
+                + "-fx-border-color: " + color + "; -fx-padding:5px;\n"
                 + "-fx-font-weight: bold;\n"
-                + "-fx-font-size: 60px;\n"
+                + "-fx-font-size: 30px;\n"
                 + "-fx-background-color: linear-gradient(" + color + ", " + color + ");\n"
                 + "-fx-border-radius: 10;\n"
                 + "-fx-background-radius: 10;\n"
                 + "-fx-text-fill: #FFFFFF;\n");
         cardManageButton(button1, front, back, deck);
+        button1.setWrapText(true);
+        button1.setTextAlignment(TextAlignment.CENTER);
+
         return button1;
 
     }
@@ -546,12 +544,16 @@ public class GUI extends Application {
     // EFFECTS: when create button pressed it will take inputs for front and back and adds to center vbox
     private void createCardButton(Button createCard) {
         createCard.setOnMouseClicked(event -> {
+            if (decksEmpty()) {
+                return;
+            }
             moveMenu();
             TextField textField = new TextField();
             textField.setPrefSize(500, 120);
             rightVbx.getChildren().clear();
             rightVbx.getChildren().addAll(instructionLabels("Enter Card's Front"), textField);
             textFieldStyle(textField);
+
             textField.setOnAction(event1 -> {
                 String front = textField.getText();
                 Button button1 = showCard(front, "", null);
@@ -561,10 +563,24 @@ public class GUI extends Application {
                 rotate90Deg(button1, 1);
                 textField.clear();
                 rightVbx.getChildren().set(1, textField);
-
                 textField.setOnAction(event2 -> addCardToDeck(front, textField.getText()));
             });
         });
+    }
+
+    // deck empty alert
+    // EFFECTS: play an error sound if decks are empty and returns true otherwise does nothing and returns false
+    private boolean decksEmpty() {
+        if (account.numberOfDecks() == 0) {
+            playErrorSound();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "there are no decks. first make one");
+
+            alert.showAndWait();
+
+            return true;
+        }
+        return false;
     }
 
     // rotate node
@@ -600,6 +616,7 @@ public class GUI extends Application {
     // textfield design
     // EFFECTS: a textfield design
     private void textFieldStyle(TextField textField) {
+
         textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
                 + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
                 + "-fx-font-weight: bold;\n"
@@ -608,6 +625,7 @@ public class GUI extends Application {
                 + "-fx-border-radius: 10;\n"
                 + "-fx-background-radius: 10;\n"
                 + "-fx-text-fill: #FFFFFF;\n");
+        textField.autosize();
         textField.setAlignment(Pos.CENTER);
     }
 
@@ -620,7 +638,10 @@ public class GUI extends Application {
         rightVbx.getChildren().add(button);
         button.setAlignment(Pos.CENTER);
         pendingCard = new FlashCard(front, back);
-
+        showAllDecks();
+        Node node = rightVbx.getChildren().get(0);
+        rightVbx.getChildren().clear();
+        rightVbx.getChildren().addAll(instructionLabels("Choose a deck to add it to"), node);
 
     }
 
@@ -631,6 +652,7 @@ public class GUI extends Application {
         load.setOnMouseClicked(event -> {
             TextField textField = makeTextField();
             centerVbx.getChildren().clear();
+            centerVbx.getChildren().add(instructionLabels("Type Your Username"));
             centerVbx.getChildren().add(textField);
             textField.setOnAction(event11 -> {
                 try {
@@ -641,7 +663,6 @@ public class GUI extends Application {
 
                 } catch (IOException e) {
                     accountError(false);
-                    centerVbx.getChildren().remove(textField);
                     emptyPage();
                     makeIntroMenu();
                 }
@@ -703,6 +724,7 @@ public class GUI extends Application {
             textField.setPrefSize(500, 120);
             textField.setAlignment(Pos.CENTER);
             rightVbx.getChildren().clear();
+            rightVbx.getChildren().add(instructionLabels("Type Deck Name"));
             rightVbx.getChildren().add(textField);
             textFieldStyle(textField);
             textField.setOnAction(event1 -> {
@@ -744,9 +766,9 @@ public class GUI extends Application {
     // MODIFIES: button
     // EFFECTS: sets button to specific design
     private void mainButtonDesign(Button button) {
-        button.setMinSize(280, 60);
+        button.setMinSize(WIDTH / 6, 60);
         button.setMaxSize(380, 70);
-        button.setPrefSize(280, 60);
+        button.setPrefSize(WIDTH / 6, 60);
         button.setStyle("-fx-background-color: linear-gradient(#00e6e6, #00ffff);\n"
                 + "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.3) , 2, 1.0 , 1 , 5 );\n"
                 + "-fx-text-fill: white;\n"
