@@ -95,5 +95,16 @@ some very good and some very basic.
     
 **Phase 4: Task 3**
 - change 1: coupling
-- I fixed the problem in the GUI class where changing the width and height would casue problems since the size of the buttons wouldn't change.
+- I fixed the problem in the GUI class where changing the width and height would cause problems since the size of the buttons wouldn't change.
     - I made constants for width and height and the buttons are created based on them
+    
+- change 2: cohesion
+- I improved the cohesion in GUI class:
+    - initially, GUI handled everything from inputs to design and handling information
+    - the app has 3 main columns.
+        - I created an abstract class(Box) and created 3 other classes(Center,Right,Left) extending Box that help break down the responsibilities of the GUI class
+        - Center handles main buttons such as creating decks,saving,loading
+        - Right handles getting card input and showing flashcards
+        - Left handles showing decks and deleting them
+        - the Gui handled the animations,rotations,background and the data the other classes need to access
+        - the classes took more time to implement but because of this it's easier to understand the classes functionality and GUI isn't doing everything

@@ -19,7 +19,7 @@ public class Reader {
 
     // EFFECTS: returns an account parsed from file; throws
     // IOException if an exception is raised when opening / reading from file
-    public static Account readAccounts(File file) throws IOException {
+    public static Account readAccounts(File file) throws IOException, MaxLengthException {
         List<String> fileContent = readFile(file);
         return parseContent(fileContent);
     }
@@ -32,7 +32,7 @@ public class Reader {
 
     // EFFECTS: returns an account parsed from list of strings
     // where each string contains data for one account/one deck/one card
-    private static Account parseContent(List<String> fileContent) {
+    private static Account parseContent(List<String> fileContent) throws MaxLengthException {
         Account account = null;
         Deck deck = null;
 
@@ -48,11 +48,8 @@ public class Reader {
                 account.addDeck(deck);
             }
             if (firstNum == 1) {
-                try {
-                    deck.addCard(new FlashCard(lineComponents.get(1), lineComponents.get(2)));
-                } catch (MaxLengthException e) {
-                    e.printStackTrace();
-                }
+                deck.addCard(new FlashCard(lineComponents.get(1), lineComponents.get(2)));
+
             }
 
         }

@@ -75,7 +75,7 @@ public class WriterTest {
             assertEquals(flashCard.getFront(), "In the 1984 vice presidential debates who was George H.W. Bush's opponent?");
             assertEquals(flashCard.getBack(), "Geraldine Ferraro");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Shouldn't have thrown Exception");
         }
     }

@@ -168,7 +168,7 @@ public class FlashCardApp {
             try {
                 this.account = Reader.readAccounts(new File(STORED_ACCOUNTS + name));
                 break;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.out.println("No account with that name exists. try again or type quit");
             }
         }

@@ -57,7 +57,7 @@ public class ReaderTest {
             assertEquals(flashCard.getFront(), "anglais");
             assertEquals(flashCard.getBack(), "english");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Shouldn't have thrown Exception");
         }
 
