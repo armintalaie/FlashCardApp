@@ -92,3 +92,8 @@ some very good and some very basic.
 - option 1: Test and design a class that is robust.  You must have at least one method that throws a checked exception.  You must have one test for the case where the exception is expected and another where the exception is not expected.
 - FlashCard Class is the class that has been designed to be robust 
     - it checks where the flashcard app front and back are shorter than MAX_CARD_LENGTH or not
+    
+**Phase 4: Task 3**
+- change 1: coupling
+- I fixed the problem in the GUI class where changing the width and height would casue problems since the size of the buttons wouldn't change.
+    - I made constants for width and height and the buttons are created based on them

@@ -19,7 +19,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.Account;
 import model.Deck;
@@ -37,18 +36,19 @@ public class GUI extends Application {
     //TODO: add readme step by step instructions to use app
     //TODO: able to make text smaller for longer texts
 
-    private static double WIDTH = 1600;
-    private static double HEIGHT = 900;
-    private Account account;
-    private Stage stage;
-    private VBox leftVbx;
-    private VBox centerVbx;
-    private VBox rightVbx;
-    private HBox mainBox;
-    private FlashCard pendingCard = null;
-    private boolean deleteMode = false;
-    private Button selected = null;
-    private boolean darkMode = false;
+    static double WIDTH = 1200;
+    static double HEIGHT = 720;
+    Account account;
+    Stage stage;
+    VBox leftVbx;
+    VBox centerVbx;
+    VBox rightVbx;
+    HBox mainBox;
+    FlashCard pendingCard = null;
+    boolean deleteMode = false;
+    Button selected = null;
+    boolean darkMode = false;
+
 
     // starts application
     // MODIFIES: THIS
@@ -61,15 +61,18 @@ public class GUI extends Application {
         rightVbx = makeMainVBoxes();
         centerVbx = makeMainVBoxes();
         mainBox.getChildren().addAll(leftVbx, centerVbx, rightVbx);
+
+
         group.getChildren().add(mainBox);
         Scene scene = new Scene(group, WIDTH, HEIGHT);
-        Circle cir2 = new Circle(WIDTH - 40, HEIGHT - 40, 30);
+        Circle cir2 = new Circle(WIDTH - 50, HEIGHT - 50, 30);
         darkModeButton(cir2);
         group.getChildren().add(cir2);
         primaryStage.setScene(scene);
-        primaryStage.show();
         launchButton();
-        primaryStage.setResizable(false);
+        primaryStage.show();
+
+        //primaryStage.setResizable(false);
         stage = primaryStage;
         mainScreenAnimation();
     }
@@ -246,7 +249,7 @@ public class GUI extends Application {
 
     // make textfield
     // EFFECTS: creates textfield with certain design
-    private TextField makeTextField() {
+    public TextField makeTextField() {
         TextField textField = new TextField();
         textField.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
                 + "-fx-border-color: #b3d9ff; -fx-padding:3px;\n"
@@ -274,7 +277,7 @@ public class GUI extends Application {
     private void createMenu() {
         Label label = new Label("Hi " + this.account.getName() + "!");
         label.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
-                + "-fx-font-weight: bold; -fx-font-size: 80px; -fx-text-fill: #FFFFFF;");
+                + "-fx-font-weight: bold; -fx-font-size: 70px; -fx-text-fill: #FFFFFF;");
         label.setPadding(new Insets(10, 0, 30, 0));
         label.setAlignment(Pos.TOP_CENTER);
         Button createDeck = makeAButton("Create a deck");
@@ -438,9 +441,9 @@ public class GUI extends Application {
     // EFFECTS: deck button size and design
     private void deckButtonDesign(Button button) {
         if (selected != null && button.getText().equals(selected.getText())) {
-            button.setPrefSize(360, 100);
+            button.setPrefSize(WIDTH / 4, HEIGHT / 10);
         } else {
-            button.setPrefSize(300, 80);
+            button.setPrefSize(WIDTH / 4 - 30, HEIGHT / 10 - 30);
         }
 
         String color = "#b3d9ff";
@@ -478,7 +481,7 @@ public class GUI extends Application {
     // EFFECTS: create card button with design
     private Button showCard(String front, String back, Deck deck) {
         Button button1 = new Button(front);
-        button1.setPrefSize(500, 120);
+        button1.setPrefSize(WIDTH / 3, HEIGHT / 10);
         button1.setAlignment(Pos.CENTER);
         String color = "#b3d9ff";
         if (darkMode) {
@@ -549,7 +552,7 @@ public class GUI extends Application {
             }
             moveMenu();
             TextField textField = new TextField();
-            textField.setPrefSize(500, 120);
+            textField.setPrefSize(WIDTH / 3, HEIGHT / 10);
             rightVbx.getChildren().clear();
             rightVbx.getChildren().addAll(instructionLabels("Enter Card's Front"), textField);
             textFieldStyle(textField);
@@ -599,7 +602,7 @@ public class GUI extends Application {
     // instruction label
     // MODIFIES: THIS
     // EFFECTS: creates instruction label when creating card
-    private Label instructionLabels(String title) {
+    public Label instructionLabels(String title) {
         Label label = new Label(title);
         label.setStyle("-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 10, 0.7 , 4 , 9 );\n"
                 + " -fx-padding:3px;\n"
@@ -640,13 +643,13 @@ public class GUI extends Application {
         try {
             pendingCard = new FlashCard(front, back);
         } catch (Exception e) {
-            //TODO
+            //
         }
 
         showAllDecks();
         Node node = rightVbx.getChildren().get(0);
         rightVbx.getChildren().clear();
-        rightVbx.getChildren().addAll(instructionLabels("Choose a deck to add it to"), node);
+        rightVbx.getChildren().addAll(instructionLabels("Click a deck to add"), node);
 
     }
 
@@ -726,7 +729,7 @@ public class GUI extends Application {
         createDeck.setOnMouseClicked(event -> {
             moveMenu();
             TextField textField = new TextField();
-            textField.setPrefSize(500, 120);
+            textField.setPrefSize(WIDTH / 3, HEIGHT / 10);
             textField.setAlignment(Pos.CENTER);
             rightVbx.getChildren().clear();
             rightVbx.getChildren().add(instructionLabels("Type Deck Name"));
@@ -771,9 +774,9 @@ public class GUI extends Application {
     // MODIFIES: button
     // EFFECTS: sets button to specific design
     private void mainButtonDesign(Button button) {
-        button.setMinSize(WIDTH / 6, 60);
-        button.setMaxSize(380, 70);
-        button.setPrefSize(WIDTH / 6, 60);
+        button.setMinSize(WIDTH / 7, HEIGHT / 14);
+        button.setMaxSize(WIDTH / 5, HEIGHT / 12);
+        button.setPrefSize(WIDTH / 6, HEIGHT / 13);
         button.setStyle("-fx-background-color: linear-gradient(#00e6e6, #00ffff);\n"
                 + "-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.3) , 2, 1.0 , 1 , 5 );\n"
                 + "-fx-text-fill: white;\n"
