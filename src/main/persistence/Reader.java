@@ -1,5 +1,6 @@
 package persistence;
 
+import model.exceptions.*;
 import model.Account;
 import model.Deck;
 import model.FlashCard;
@@ -47,7 +48,11 @@ public class Reader {
                 account.addDeck(deck);
             }
             if (firstNum == 1) {
-                deck.addCard(new FlashCard(lineComponents.get(1), lineComponents.get(2)));
+                try {
+                    deck.addCard(new FlashCard(lineComponents.get(1), lineComponents.get(2)));
+                } catch (MaxLengthException e) {
+                    e.printStackTrace();
+                }
             }
 
         }

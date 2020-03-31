@@ -637,7 +637,12 @@ public class GUI extends Application {
         rightVbx.getChildren().clear();
         rightVbx.getChildren().add(button);
         button.setAlignment(Pos.CENTER);
-        pendingCard = new FlashCard(front, back);
+        try {
+            pendingCard = new FlashCard(front, back);
+        } catch (Exception e) {
+            //TODO
+        }
+
         showAllDecks();
         Node node = rightVbx.getChildren().get(0);
         rightVbx.getChildren().clear();

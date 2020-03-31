@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import model.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ class DeckTest {
     private FlashCard flashCard1;
 
     @BeforeEach
-    void runBefore() {
+    void runBefore() throws MaxLengthException {
         deck = new Deck("Math");
         flashCard = new FlashCard("2 + 2 = ?", "4");
         flashCard1 = new FlashCard("2 x 3 = ?", "6");
@@ -32,7 +33,7 @@ class DeckTest {
     }
 
     @Test
-    void testAddCard() {
+    void testAddCard() throws MaxLengthException {
         assertEquals(deck.numberOfCards(), 0);
         FlashCard flashCard = new FlashCard("2 + 2 = ?", "4");
         deck.addCard(flashCard);
@@ -92,7 +93,7 @@ class DeckTest {
 
         deck.addCard(flashCard);
         assertNull(deck.findCardWithBack(flashCard1.getBack()));
-        assertEquals(deck.findCardWithBack(flashCard.getBack()) , flashCard);
+        assertEquals(deck.findCardWithBack(flashCard.getBack()), flashCard);
 
     }
 
@@ -108,6 +109,8 @@ class DeckTest {
         cards.add(flashCard1);
         assertEquals(deck.getCards(), cards);
     }
+
+
 }
 
 

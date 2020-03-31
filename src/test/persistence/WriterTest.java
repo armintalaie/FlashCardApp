@@ -1,6 +1,7 @@
 package persistence;
 
 
+import model.exceptions.*;
 import model.Account;
 import model.Deck;
 import model.FlashCard;
@@ -25,15 +26,19 @@ public class WriterTest {
         account = new Account("Jack");
 
         Deck deck = new Deck("Math");
-        deck.addCard(new FlashCard("2+2" , "4"));
-        deck.addCard(new FlashCard("2+3" , "5"));
-        deck.addCard(new FlashCard("2+4" , "6"));
-        account.addDeck(deck);
+        try {
+            deck.addCard(new FlashCard("2+2", "4"));
+            deck.addCard(new FlashCard("2+3", "5"));
+            deck.addCard(new FlashCard("2+4", "6"));
+            account.addDeck(deck);
 
-        deck = new Deck("History");
-        deck.addCard(new FlashCard("In what year did India gain its independence from Britain?" , "1947"));
-        deck.addCard(new FlashCard("In the 1984 vice presidential debates who was George H.W. Bush's opponent?" , "Geraldine Ferraro"));
-        account.addDeck(deck);
+            deck = new Deck("History");
+            deck.addCard(new FlashCard("In what year did India gain its independence from Britain?", "1947"));
+            deck.addCard(new FlashCard("In the 1984 vice presidential debates who was George H.W. Bush's opponent?", "Geraldine Ferraro"));
+            account.addDeck(deck);
+        } catch (MaxLengthException e) {
+        }
+
 
     }
 

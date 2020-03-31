@@ -1,5 +1,6 @@
 package ui;
 
+import model.exceptions.*;
 import model.Account;
 import model.Deck;
 import model.FlashCard;
@@ -275,6 +276,9 @@ public class FlashCardApp {
     // EFFECTS: creates a flashcard from inputs for front and back and adds them to a previously created deck
     private void createAndAddCard() {
         FlashCard flashCard = createCard();
+        if (flashCard == null) {
+            return;
+        }
         System.out.println("card successfully made. which deck do you want ot add it to?");
         while (true) {
             printAllDecks(account);
@@ -303,7 +307,12 @@ public class FlashCardApp {
         String front = scanner.nextLine();
         System.out.println("Enter Flashcard's back");
         String back = scanner.nextLine();
-        return new FlashCard(front, back);
+        try {
+            return new FlashCard(front, back);
+        } catch (MaxLengthException e) {
+            System.out.println("card's front or back is too long. card wasn't made");
+            return null;
+        }
     }
 
 

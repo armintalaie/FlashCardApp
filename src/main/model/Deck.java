@@ -12,6 +12,7 @@ public class Deck {
     //Creates a Deck
     //EFFECTS : sets Deck's name and creates empty cards list
     public Deck(String name) {
+
         setName(name);
         cards = new ArrayList<>();
     }

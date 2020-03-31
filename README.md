@@ -43,7 +43,7 @@ some very good and some very basic.
 
 - You can create Deck by:
     - first click launch button
-    - click create account -> click on text box -> write name -> press enter
+    - click create account -> click on text box -> type name -> press enter
     - click create deck -> click on text box -> type name -> press enter
     
 - You can create + add a flash card a flashcard by:
@@ -68,7 +68,7 @@ some very good and some very basic.
    
 - You can remove a deck a flashcard by:
     - after creating a deck (optional: and a flashcard and adding it to the deck) explained above
-    - click on decks 
+    - click on "decks" button
     - click on edit button -> click on the deck you want to delete -> confirm pop up -> select other decks to delete or click done button to stop editing mode
    
 
@@ -86,3 +86,9 @@ some very good and some very basic.
 - You can reload the state of my application by
     - first click launch button -> click load account -> click on text box -> type name that has been saved -> press enter
     - (for testing) the app initially has accounts saved with names: Joe, Mark
+    
+    
+**Phase 4: Task 2**
+- option 1: Test and design a class that is robust.  You must have at least one method that throws a checked exception.  You must have one test for the case where the exception is expected and another where the exception is not expected.
+- FlashCard Class is the class that has been designed to be robust 
+    - it checks where the flashcard app front and back are shorter than MAX_CARD_LENGTH or not

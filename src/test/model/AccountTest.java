@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import persistence.Reader;
@@ -93,7 +94,7 @@ class AccountTest {
     }
 
     @Test
-    void testSave() {
+    void testSave() throws MaxLengthException {
 
         try {
             this.account.setName("Joe");
